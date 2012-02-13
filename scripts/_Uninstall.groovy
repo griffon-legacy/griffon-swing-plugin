@@ -41,12 +41,3 @@ initializeFile = new File(basedir, '/griffon-app/lifecycle/Initialize.groovy')
 initializeFile.text -= 'import groovy.swing.SwingBuilder\n'
 initializeFile.text -= 'import static griffon.util.GriffonApplicationUtils.isMacOSX\n'
 initializeFile.text -= "SwingBuilder.lookAndFeel((isMacOSX ? 'system' : 'nimbus'), 'gtk', ['metal', [boldFonts: false]])\n"
-
-/*
-griffonSettings.dependencyManager.removePluginDependency('swing', [
-    conf: 'compile',
-    name: 'griffon-swing-addon',
-    group: 'org.codehaus.griffon.plugins',
-    version: swingPluginVersion
-])
-*/

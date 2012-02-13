@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import griffon.util.Metadata
-
+ 
 /**
  * @author Andres Almiray
  */
 
 includeTargets << griffonScript('_GriffonCreateProject')
+
+updateMetadata('app.toolkit': 'swing')
 
 configText = '''root {
     'groovy.swing.SwingBuilder' {
@@ -69,7 +69,3 @@ if(initializeScriptOrClassInApp.text == initializeScriptOrClassInFiles.text) {
 }
 
 ant.delete(quiet: true, failonerror: false, dir: tempWorkDir) 
-
-Metadata metadata = Metadata.getInstance(new File("${basedir}/application.properties"))
-metadata[Metadata.APPLICATION_TOOLKITS] = 'swing'
-metadata.persist()
