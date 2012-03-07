@@ -32,3 +32,5 @@ log4j = {
     warn  'griffon'
 }
 
+griffon.project.source.level = '1.5'
+griffon.project.target.level = '1.5'

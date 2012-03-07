@@ -20,7 +20,7 @@ public class @artifact.name@ extends AbstractGriffonController {
         Please read chapter 9 of the Griffon Guide to know more.
 
     public void action(final ActionEvent e) {
-        execOutside(new Runnable() {
+        execOutsideUI(new Runnable() {
             public void run() {
                 // action code
             }

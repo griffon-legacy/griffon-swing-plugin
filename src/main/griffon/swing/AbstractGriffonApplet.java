@@ -25,12 +25,15 @@ import groovy.lang.Closure;
 import groovy.util.ConfigObject;
 import groovy.util.FactoryBuilderSupport;
 import org.codehaus.griffon.runtime.core.EventRouter;
+import org.codehaus.griffon.runtime.core.ResourceLocator;
 import org.codehaus.griffon.runtime.util.GriffonApplicationHelper;
 import org.codehaus.griffon.runtime.util.MVCGroupExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -61,6 +64,7 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
     private ApplicationPhase phase = ApplicationPhase.INITIALIZE;
 
     private final EventRouter eventRouter = new EventRouter();
+    private final ResourceLocator resourceLocator = new ResourceLocator();
     private final List<ShutdownHandler> shutdownHandlers = new ArrayList<ShutdownHandler>();
     private final String[] startupArgs;
     private final Object shutdownLock = new Object();
@@ -284,18 +288,20 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         // with stage #2 if and only if the current thread is
         // the ui thread
         log.debug("Shutdown stage 1: notify all event listeners");
-        final CountDownLatch latch = new CountDownLatch(isUIThread() ? 1 : 0);
-        addApplicationEventListener(GriffonApplication.Event.SHUTDOWN_START.getName(), new RunnableWithArgs() {
-            @Override
-            public void run(Object[] args) {
-                latch.countDown();
+        if (isEventPublishingEnabled()) {
+            final CountDownLatch latch = new CountDownLatch(isUIThread() ? 1 : 0);
+            addApplicationEventListener(GriffonApplication.Event.SHUTDOWN_START.getName(), new RunnableWithArgs() {
+                @Override
+                public void run(Object[] args) {
+                    latch.countDown();
+                }
+            });
+            event(GriffonApplication.Event.SHUTDOWN_START.getName(), asList(this));
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                // ignore
             }
-        });
-        event(GriffonApplication.Event.SHUTDOWN_START.getName(), asList(this));
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            // ignore
         }
 
         // stage 2 - alert all shutdown handlers
@@ -330,13 +336,22 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         event(GriffonApplication.Event.STARTUP_START.getName(), asList(this));
 
         Object startupGroups = ConfigUtils.getConfigValue(getConfig(), "application.startupGroups");
-        if (log.isInfoEnabled()) {
-            log.info("Initializing all startup groups: " + startupGroups);
-        }
-
         if (startupGroups instanceof List) {
+            if (log.isInfoEnabled()) {
+                log.info("Initializing all startup groups: " + startupGroups);
+            }
+
             for (String groupName : (List<String>) startupGroups) {
                 createMVCGroup(groupName);
+            }
+        } else if (startupGroups != null && startupGroups.getClass().isArray()) {
+            Object[] groups = (Object[]) startupGroups;
+            if (log.isInfoEnabled()) {
+                log.info("Initializing all startup groups: " + Arrays.toString(groups));
+            }
+
+            for (Object groupName : groups) {
+                createMVCGroup(String.valueOf(groupName));
             }
         }
 
@@ -353,12 +368,22 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         eventRouter.publish(eventName, params);
     }
 
+    // TODO @deprecated - remove before 1.0
     public void eventOutside(String eventName) {
-        eventRouter.publishOutside(eventName, Collections.emptyList());
+        eventOutsideUI(eventName, Collections.emptyList());
     }
 
+    // TODO @deprecated - remove before 1.0
     public void eventOutside(String eventName, List params) {
-        eventRouter.publishOutside(eventName, params);
+        eventOutsideUI(eventName, params);
+    }
+
+    public void eventOutsideUI(String eventName) {
+        eventRouter.publishOutsideUI(eventName, Collections.emptyList());
+    }
+
+    public void eventOutsideUI(String eventName, List params) {
+        eventRouter.publishOutsideUI(eventName, params);
     }
 
     public void eventAsync(String eventName) {
@@ -393,6 +418,14 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         eventRouter.removeEventListener(eventName, listener);
     }
 
+    public boolean isEventPublishingEnabled() {
+        return eventRouter.isEnabled();
+    }
+
+    public void setEventPublishingEnabled(boolean enabled) {
+        eventRouter.setEnabled(enabled);
+    }
+
     public Object createApplicationContainer() {
         return null;
     }
@@ -423,15 +456,30 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         return UIThreadManager.getInstance().isUIThread();
     }
 
+    // TODO @deprecated - remove before 1.0
     public void execAsync(Runnable runnable) {
+        execInsideUIAsync(runnable);
+    }
+
+    // TODO @deprecated - remove before 1.0
+    public void execSync(Runnable runnable) {
+        execInsideUIAsync(runnable);
+    }
+
+    // TODO @deprecated - remove before 1.0
+    public void execOutside(Runnable runnable) {
+        execOutsideUI(runnable);
+    }
+
+    public void execInsideUIAsync(Runnable runnable) {
         UIThreadManager.getInstance().executeAsync(runnable);
     }
 
-    public void execSync(Runnable runnable) {
+    public void execInsideUISync(Runnable runnable) {
         UIThreadManager.getInstance().executeSync(runnable);
     }
 
-    public void execOutside(Runnable runnable) {
+    public void execOutsideUI(Runnable runnable) {
         UIThreadManager.getInstance().executeOutside(runnable);
     }
 
@@ -562,5 +610,17 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
             // ignored
         }
         return null;
+    }
+
+    public InputStream getResourceAsStream(String name) {
+        return resourceLocator.getResourceAsStream(name);
+    }
+
+    public URL getResourceAsURL(String name) {
+        return resourceLocator.getResourceAsURL(name);
+    }
+
+    public List<URL> getResources(String name) {
+        return resourceLocator.getResources(name);
     }
 }

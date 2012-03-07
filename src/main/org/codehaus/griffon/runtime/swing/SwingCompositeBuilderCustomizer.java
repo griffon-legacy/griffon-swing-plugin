@@ -22,8 +22,8 @@ import groovy.swing.factory.TableFactory;
 
 import java.awt.LayoutManager;
 
-import org.codehaus.griffon.runtime.builder.UberBuilder;
-import org.codehaus.griffon.runtime.util.DefaultCompositeBuilderCustomizer;
+import groovy.util.FactoryBuilderSupport;
+import org.codehaus.griffon.runtime.builder.DefaultCompositeBuilderCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,22 +39,22 @@ public class SwingCompositeBuilderCustomizer extends DefaultCompositeBuilderCust
     private static final Logger LOG = LoggerFactory.getLogger(SwingCompositeBuilderCustomizer.class);
 
     @Override
-    public void registerBeanFactory(UberBuilder uberBuilder, String name, String groupName, Class<?> beanClass) {
+    public void registerBeanFactory(FactoryBuilderSupport builder, String name, String groupName, Class<?> beanClass) {
         if (LayoutManager.class.isAssignableFrom(beanClass)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Registering " + name + " with " + beanClass + " using LayoutFactory");
             }
-            uberBuilder.registerFactory(name, groupName, new LayoutFactory(beanClass));
+            builder.registerFactory(name, groupName, new LayoutFactory(beanClass));
         } else if (JScrollPane.class.isAssignableFrom(beanClass)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Registering " + name + " with " + beanClass + " using ScrollPaneFactory");
             }
-            uberBuilder.registerFactory(name, groupName, new ScrollPaneFactory(beanClass));
+            builder.registerFactory(name, groupName, new ScrollPaneFactory(beanClass));
         } else if (JTable.class.isAssignableFrom(beanClass)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Registering " + name + " with " + beanClass + " using TableFactory");
             }
-            uberBuilder.registerFactory(name, groupName, new TableFactory(beanClass));
+            builder.registerFactory(name, groupName, new TableFactory(beanClass));
         } else if (JComponent.class.isAssignableFrom(beanClass)
                 || JApplet.class.isAssignableFrom(beanClass)
                 || JDialog.class.isAssignableFrom(beanClass)
@@ -64,12 +64,12 @@ public class SwingCompositeBuilderCustomizer extends DefaultCompositeBuilderCust
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Registering " + name + " with " + beanClass + " using ComponentFactory");
             }
-            uberBuilder.registerFactory(name, groupName, new ComponentFactory(beanClass));
+            builder.registerFactory(name, groupName, new ComponentFactory(beanClass));
         } else {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Registering " + name + " with " + beanClass + " using default factory");
             }
-            uberBuilder.registerBeanFactory(name, groupName, beanClass);
+            builder.registerBeanFactory(name, groupName, beanClass);
         }
     }
 }

@@ -24,7 +24,7 @@ public class @artifact.name@ extends AbstractGriffonView {
 
     @Override
     public void mvcGroupInit(Map<String, Object> args) {
-        execSync(new Runnable() {
+        execInsideUISync(new Runnable() {
             public void run() {
                 content = buildContent();
             }
@@ -65,7 +65,7 @@ public class @artifact.name@ extends AbstractGriffonView {
     }
 
     public void show(final Window window) {
-        execSync(new Runnable() {
+        execInsideUISync(new Runnable() {
             public void run() {
                 Window owner = findOwner(window);
                 if(dialog == null || dialog.getOwner() != owner) {
@@ -79,7 +79,7 @@ public class @artifact.name@ extends AbstractGriffonView {
     }
 
     public void hide() {
-        execSync(new Runnable() {
+        execInsideUISync(new Runnable() {
             public void run() {
                 if(dialog != null) {
                     getWindowManager().hide(dialog);

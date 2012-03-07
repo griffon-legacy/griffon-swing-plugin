@@ -254,7 +254,7 @@ public final class WindowManager implements ShutdownHandler {
      */
     public void show(final Window window) {
         if (window == null) return;
-        app.execSync(new Runnable() {
+        app.execInsideUISync(new Runnable() {
             public void run() {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Showing window with name: '" + window.getName() + "' at index " + windows.indexOf(window) + " " + window);
@@ -273,7 +273,7 @@ public final class WindowManager implements ShutdownHandler {
      */
     public void show(final JInternalFrame internalFrame) {
         if (internalFrame == null) return;
-        app.execSync(new Runnable() {
+        app.execInsideUISync(new Runnable() {
             public void run() {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Showing internalFrame with name: '" + internalFrame.getName() + " " + internalFrame);
@@ -307,7 +307,7 @@ public final class WindowManager implements ShutdownHandler {
      */
     public void hide(final Window window) {
         if (window == null) return;
-        app.execSync(new Runnable() {
+        app.execInsideUISync(new Runnable() {
             public void run() {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Hiding window with name: '" + window.getName() + "' at index " + windows.indexOf(window) + " " + window);
@@ -326,7 +326,7 @@ public final class WindowManager implements ShutdownHandler {
      */
     public void hide(final JInternalFrame internalFrame) {
         if (internalFrame == null) return;
-        app.execSync(new Runnable() {
+        app.execInsideUISync(new Runnable() {
             public void run() {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Hiding internal frame with name: '" + internalFrame.getName() + " " + internalFrame);

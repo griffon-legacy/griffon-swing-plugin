@@ -27,7 +27,7 @@ public class @artifact.name@ extends AbstractGriffonView {
 
     @Override
     public void mvcGroupInit(final Map<String, Object> args) {
-        execSync(new Runnable() {
+        execInsideUISync(new Runnable() {
             public void run() {
                 Container container = (Container) getApp().createApplicationContainer();
                 if(container instanceof Window) {
