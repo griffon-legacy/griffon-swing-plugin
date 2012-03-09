@@ -34,26 +34,18 @@ configText = '''root {
 }'''
 builderConfigFile.text -= configText    
 
-configText = '''root {
+configText = '''
+root {
     'groovy.swing.SwingBuilder' {
         controller = ['Threading']
         view = '*'
     }
-}'''
-if(!(builderConfigFile.text.contains(configText))) {
+}
+'''
+if(!(builderConfigFile.text.contains('groovy.swing.SwingBuilder'))) {
     println 'Adding groovy.swing.SwingBuilder to Builder.groovy'
     builderConfigFile.text += configText
 }
-
-/*
-configText = '''
-root.'SwingGriffonAddon'.addon=true
-'''
-if(!(builderConfigFile.text.contains(configText))) {
-    println 'Adding SwingGriffonAddon to Builder.groovy'
-    builderConfigFile.text += configText
-}
-*/
 
 tempWorkDir = new File("${basedir}/swing-install-tmp")
 griffonUnpack(dest: tempWorkDir, src: "griffon-$projectType-files.jar")
