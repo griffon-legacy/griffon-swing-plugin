@@ -16,7 +16,6 @@
 
 import griffon.util.ApplicationHolder;
 import griffon.swing.factory.ApplicationFactory;
-import griffon.swing.factory.RootFactory;
 import org.codehaus.griffon.runtime.core.AbstractGriffonAddon;
 
 /**
@@ -26,6 +25,5 @@ public class SwingGriffonAddon extends AbstractGriffonAddon {
     public SwingGriffonAddon() {
         super(ApplicationHolder.getApplication());
         factories.put("application", new ApplicationFactory());
-        factories.put("root", new RootFactory());
     }
 }

@@ -368,16 +368,6 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         eventRouter.publish(eventName, params);
     }
 
-    // TODO @deprecated - remove before 1.0
-    public void eventOutside(String eventName) {
-        eventOutsideUI(eventName, Collections.emptyList());
-    }
-
-    // TODO @deprecated - remove before 1.0
-    public void eventOutside(String eventName, List params) {
-        eventOutsideUI(eventName, params);
-    }
-
     public void eventOutsideUI(String eventName) {
         eventRouter.publishOutsideUI(eventName, Collections.emptyList());
     }
@@ -454,21 +444,6 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
 
     public boolean isUIThread() {
         return UIThreadManager.getInstance().isUIThread();
-    }
-
-    // TODO @deprecated - remove before 1.0
-    public void execAsync(Runnable runnable) {
-        execInsideUIAsync(runnable);
-    }
-
-    // TODO @deprecated - remove before 1.0
-    public void execSync(Runnable runnable) {
-        execInsideUIAsync(runnable);
-    }
-
-    // TODO @deprecated - remove before 1.0
-    public void execOutside(Runnable runnable) {
-        execOutsideUI(runnable);
     }
 
     public void execInsideUIAsync(Runnable runnable) {

@@ -18,8 +18,8 @@
  * @author Andres Almiray
  */
 class SwingGriffonPlugin {
-    String version = '0.9.5'
-    String griffonVersion = '0.9.5 > *'
+    String version = '0.9.6'
+    String griffonVersion = '0.9.6 > *'
     Map dependsOn = [:]
     List pluginIncludes = []
     String license = 'Apache Software License 2.0'
