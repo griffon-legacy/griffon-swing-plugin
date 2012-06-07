@@ -18,8 +18,8 @@
  * @author Andres Almiray
  */
 class SwingGriffonPlugin {
-    String version = '0.9.6'
-    String griffonVersion = '0.9.6 > *'
+    String version = '1.0.0'
+    String griffonVersion = '1.0.0 > *'
     Map dependsOn = [:]
     List pluginIncludes = []
     String license = 'Apache Software License 2.0'
@@ -73,12 +73,29 @@ TBD
 #### application
 TBD
 
-#### root
-TBD
-
 Configuration
 -------------
-There's no special configuration for this plugin.
+
+### Checking EDT Violations
+
+It's possible to check for EDT violations by specifying the following System property: `griffon.swing.edt.violations.check`.
+For example, while invoking `griffon run-app` like this
+
+    griffon -Dgriffon.swing.edt.violations.check=true run-app
+
+### EDT Hang Monitor
+
+Sometimes an operation running inside the EDt may take more time that what it's supposed to but it's hard to figure out
+where the problem lies exactly. The Swing plugin enables an EDT hang monitor to be run as long as the following System
+property is set: `griffon.swing.edt.hang.monitor`. The default timeout is set to `1000`. Should you require a higher timeout
+then specify an integer value (in ms) for `griffon.swing.edt.hang.monitor.timeout`. Lower values than `1000` are not accepted.
+
+Here's a sample invocation with these two properties set
+
+    griffon -Dgriffon.swing.edt.hang.monitor=true -Dgriffon.swing.edt.hang.monitor.timeout=1500 run-app
+
+**Note:** it's not recommended to enable either of these flags in production mode. These checks should be performed during
+development and/or testing.
 
 [1]: http://groovy.codehaus.org/Swing+Builder
 '''

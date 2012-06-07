@@ -206,7 +206,10 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
     }
 
     public void setLocale(Locale locale) {
-        firePropertyChange("locale", this.locale, this.locale = locale);
+        Locale oldValue = this.locale;
+        this.locale = locale;
+        Locale.setDefault(locale);
+        firePropertyChange("locale", oldValue, locale);
     }
 
     public Map<String, ?> getAddons() {
