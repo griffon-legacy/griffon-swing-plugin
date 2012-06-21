@@ -16,6 +16,9 @@
 package griffon.swing;
 
 import griffon.core.*;
+import griffon.core.i18n.MessageSource;
+import griffon.core.i18n.MessageSourceHolder;
+import griffon.core.i18n.NoSuchMessageException;
 import griffon.util.ApplicationHolder;
 import griffon.util.ConfigUtils;
 import griffon.util.Metadata;
@@ -203,6 +206,10 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
 
     public Logger getLog() {
         return log;
+    }
+
+    public void setLocaleAsString(String locale) {
+        setLocale(GriffonApplicationHelper.parseLocale(locale));
     }
 
     public void setLocale(Locale locale) {
@@ -600,5 +607,73 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
 
     public List<URL> getResources(String name) {
         return resourceLocator.getResources(name);
+    }
+
+    public String getMessage(String key) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key);
+    }
+
+    public String getMessage(String key, Locale locale) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, locale);
+    }
+
+    public String getMessage(String key, Object[] args) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, args);
+    }
+
+    public String getMessage(String key, Object[] args, Locale locale) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, args, locale);
+    }
+
+    public String getMessage(String key, List args) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, args);
+    }
+
+    public String getMessage(String key, List args, Locale locale) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, args, locale);
+    }
+
+    public String getMessage(String key, String defaultMessage) {
+        return resolveMessageSource().getMessage(key, defaultMessage);
+    }
+
+    public String getMessage(String key, String defaultMessage, Locale locale) {
+        return resolveMessageSource().getMessage(key, defaultMessage, locale);
+    }
+
+    public String getMessage(String key, Object[] args, String defaultMessage) {
+        return resolveMessageSource().getMessage(key, args, defaultMessage);
+    }
+
+    public String getMessage(String key, Object[] args, String defaultMessage, Locale locale) {
+        return resolveMessageSource().getMessage(key, args, defaultMessage, locale);
+    }
+
+    public String getMessage(String key, List args, String defaultMessage) {
+        return resolveMessageSource().getMessage(key, args, defaultMessage);
+    }
+
+    public String getMessage(String key, List args, String defaultMessage, Locale locale) {
+        return resolveMessageSource().getMessage(key, args, defaultMessage, locale);
+    }
+
+    public String getMessage(String key, Map<String, Object> args) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, args);
+    }
+
+    public String getMessage(String key, Map<String, Object> args, Locale locale) throws NoSuchMessageException {
+        return resolveMessageSource().getMessage(key, args, locale);
+    }
+
+    public String getMessage(String key, Map<String, Object> args, String defaultMessage) {
+        return resolveMessageSource().getMessage(key, args, defaultMessage);
+    }
+
+    public String getMessage(String key, Map<String, Object> args, String defaultMessage, Locale locale) {
+        return resolveMessageSource().getMessage(key, args, defaultMessage, locale);
+    }
+
+    protected MessageSource resolveMessageSource() {
+        return MessageSourceHolder.getInstance().getMessageSource();
     }
 }
