@@ -37,7 +37,7 @@ public class SwingGriffonAddon extends AbstractGriffonAddon {
 
     private static final String[] GROOVY_PACKAGES =
             System.getProperty("groovy.sanitized.stacktraces",
-                    "groovy.," +
+                            "groovy.," +
                             "org.codehaus.groovy.," +
                             "java.," +
                             "javax.," +
