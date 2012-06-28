@@ -1,0 +1,4 @@
+java.awt.Color = griffon.swing.editors.ColorPropertyEditor
+java.awt.Dimension = griffon.swing.editors.DimensionPropertyEditor
+java.awt.Insets = griffon.swing.editors.InsetsPropertyEditor
+java.awt.Point = griffon.swing.editors.PointPropertyEditor

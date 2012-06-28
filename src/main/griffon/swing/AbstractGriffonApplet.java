@@ -17,8 +17,9 @@ package griffon.swing;
 
 import griffon.core.*;
 import griffon.core.i18n.MessageSource;
-import griffon.core.i18n.MessageSourceHolder;
 import griffon.core.i18n.NoSuchMessageException;
+import griffon.core.resources.NoSuchResourceException;
+import griffon.core.resources.ResourceResolver;
 import griffon.util.ApplicationHolder;
 import griffon.util.ConfigUtils;
 import griffon.util.Metadata;
@@ -60,6 +61,8 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
     private ArtifactManager artifactManager;
     private MVCGroupManager mvcGroupManager;
     private ServiceManager serviceManager;
+    private MessageSource messageSource;
+    private ResourceResolver resourceResolver;
 
     private Locale locale = Locale.getDefault();
     public static final String[] EMPTY_ARGS = new String[0];
@@ -609,71 +612,147 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         return resourceLocator.getResources(name);
     }
 
+    public MessageSource getMessageSource() {
+        return messageSource;
+    }
+
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     public String getMessage(String key) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key);
+        return messageSource.getMessage(key);
     }
 
     public String getMessage(String key, Locale locale) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, locale);
+        return messageSource.getMessage(key, locale);
     }
 
     public String getMessage(String key, Object[] args) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, args);
+        return messageSource.getMessage(key, args);
     }
 
     public String getMessage(String key, Object[] args, Locale locale) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, args, locale);
+        return messageSource.getMessage(key, args, locale);
     }
 
     public String getMessage(String key, List args) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, args);
+        return messageSource.getMessage(key, args);
     }
 
     public String getMessage(String key, List args, Locale locale) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, args, locale);
+        return messageSource.getMessage(key, args, locale);
     }
 
     public String getMessage(String key, String defaultMessage) {
-        return resolveMessageSource().getMessage(key, defaultMessage);
+        return messageSource.getMessage(key, defaultMessage);
     }
 
     public String getMessage(String key, String defaultMessage, Locale locale) {
-        return resolveMessageSource().getMessage(key, defaultMessage, locale);
+        return messageSource.getMessage(key, defaultMessage, locale);
     }
 
     public String getMessage(String key, Object[] args, String defaultMessage) {
-        return resolveMessageSource().getMessage(key, args, defaultMessage);
+        return messageSource.getMessage(key, args, defaultMessage);
     }
 
     public String getMessage(String key, Object[] args, String defaultMessage, Locale locale) {
-        return resolveMessageSource().getMessage(key, args, defaultMessage, locale);
+        return messageSource.getMessage(key, args, defaultMessage, locale);
     }
 
     public String getMessage(String key, List args, String defaultMessage) {
-        return resolveMessageSource().getMessage(key, args, defaultMessage);
+        return messageSource.getMessage(key, args, defaultMessage);
     }
 
     public String getMessage(String key, List args, String defaultMessage, Locale locale) {
-        return resolveMessageSource().getMessage(key, args, defaultMessage, locale);
+        return messageSource.getMessage(key, args, defaultMessage, locale);
     }
 
     public String getMessage(String key, Map<String, Object> args) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, args);
+        return messageSource.getMessage(key, args);
     }
 
     public String getMessage(String key, Map<String, Object> args, Locale locale) throws NoSuchMessageException {
-        return resolveMessageSource().getMessage(key, args, locale);
+        return messageSource.getMessage(key, args, locale);
     }
 
     public String getMessage(String key, Map<String, Object> args, String defaultMessage) {
-        return resolveMessageSource().getMessage(key, args, defaultMessage);
+        return messageSource.getMessage(key, args, defaultMessage);
     }
 
     public String getMessage(String key, Map<String, Object> args, String defaultMessage, Locale locale) {
-        return resolveMessageSource().getMessage(key, args, defaultMessage, locale);
+        return messageSource.getMessage(key, args, defaultMessage, locale);
     }
 
-    protected MessageSource resolveMessageSource() {
-        return MessageSourceHolder.getInstance().getMessageSource();
+    public ResourceResolver resolveResourceSource() {
+        return resourceResolver;
+    }
+
+    public void setResourceSource(ResourceResolver resourceResolver) {
+        this.resourceResolver = resourceResolver;
+    }
+
+    public Object resolveResource(String key) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key);
+    }
+
+    public Object resolveResource(String key, Locale locale) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, locale);
+    }
+
+    public Object resolveResource(String key, Object[] args) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, args);
+    }
+
+    public Object resolveResource(String key, Object[] args, Locale locale) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, args, locale);
+    }
+
+    public Object resolveResource(String key, List args) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, args);
+    }
+
+    public Object resolveResource(String key, List args, Locale locale) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, args, locale);
+    }
+
+    public Object resolveResource(String key, Object defaultValue) {
+        return resourceResolver.resolveResource(key, defaultValue);
+    }
+
+    public Object resolveResource(String key, Object defaultValue, Locale locale) {
+        return resourceResolver.resolveResource(key, defaultValue, locale);
+    }
+
+    public Object resolveResource(String key, Object[] args, Object defaultValue) {
+        return resourceResolver.resolveResource(key, args, defaultValue);
+    }
+
+    public Object resolveResource(String key, Object[] args, Object defaultValue, Locale locale) {
+        return resourceResolver.resolveResource(key, args, defaultValue, locale);
+    }
+
+    public Object resolveResource(String key, List args, Object defaultValue) {
+        return resourceResolver.resolveResource(key, args, defaultValue);
+    }
+
+    public Object resolveResource(String key, List args, Object defaultValue, Locale locale) {
+        return resourceResolver.resolveResource(key, args, defaultValue, locale);
+    }
+
+    public Object resolveResource(String key, Map<String, Object> args) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, args);
+    }
+
+    public Object resolveResource(String key, Map<String, Object> args, Locale locale) throws NoSuchResourceException {
+        return resourceResolver.resolveResource(key, args, locale);
+    }
+
+    public Object resolveResource(String key, Map<String, Object> args, Object defaultValue) {
+        return resourceResolver.resolveResource(key, args, defaultValue);
+    }
+
+    public Object resolveResource(String key, Map<String, Object> args, Object defaultValue, Locale locale) {
+        return resourceResolver.resolveResource(key, args, defaultValue, locale);
     }
 }
