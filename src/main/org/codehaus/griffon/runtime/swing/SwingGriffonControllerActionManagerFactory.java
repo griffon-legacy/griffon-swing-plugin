@@ -17,7 +17,7 @@ package org.codehaus.griffon.runtime.swing;
 
 import griffon.core.GriffonApplication;
 import griffon.core.controller.GriffonControllerActionManager;
-import griffon.core.controller.GriffonControllerActionManagerFactory;
+import griffon.core.factories.GriffonControllerActionManagerFactory;
 
 /**
  * @author Andres Almiray
