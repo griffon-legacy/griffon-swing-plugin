@@ -16,6 +16,7 @@
 package griffon.swing;
 
 import griffon.core.*;
+import griffon.core.controller.GriffonControllerActionManager;
 import griffon.core.i18n.MessageSource;
 import griffon.core.i18n.NoSuchMessageException;
 import griffon.core.resources.NoSuchResourceException;
@@ -63,6 +64,7 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
     private ServiceManager serviceManager;
     private MessageSource messageSource;
     private ResourceResolver resourceResolver;
+    private GriffonControllerActionManager actionManager;
 
     private Locale locale = Locale.getDefault();
     public static final String[] EMPTY_ARGS = new String[0];
@@ -754,5 +756,13 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
 
     public Object resolveResource(String key, Map<String, Object> args, Object defaultValue, Locale locale) {
         return resourceResolver.resolveResource(key, args, defaultValue, locale);
+    }
+
+    public GriffonControllerActionManager getActionManager() {
+        return actionManager;
+    }
+
+    public void setActionManager(GriffonControllerActionManager actionManager) {
+        this.actionManager = actionManager;
     }
 }

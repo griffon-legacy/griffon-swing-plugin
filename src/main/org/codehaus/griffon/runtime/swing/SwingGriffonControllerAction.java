@@ -89,7 +89,7 @@ public class SwingGriffonControllerAction extends AbstractGriffonControllerActio
         return toolkitAction;
     }
 
-    public void execute(Object... args) {
+    protected void doExecute(Object... args) {
         ActionEvent event = null;
         if (args != null && args.length == 1 && args[0] instanceof ActionEvent) {
             event = (ActionEvent) args[0];
