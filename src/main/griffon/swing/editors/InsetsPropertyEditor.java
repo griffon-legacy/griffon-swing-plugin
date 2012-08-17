@@ -88,7 +88,7 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
                 super.setValue(new Insets(t, l, r, b));
                 break;
             default:
-                throw illegalValue(list, Dimension.class);
+                throw illegalValue(list, Insets.class);
         }
     }
 
@@ -106,14 +106,14 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Number) {
             return parse((Number) value);
         }
-        throw illegalValue(value, Dimension.class);
+        throw illegalValue(value, Insets.class);
     }
 
     private int parse(String val) {
         try {
-            return Integer.parseInt(String.valueOf(val).trim());
+            return Integer.parseInt(val.trim());
         } catch (NumberFormatException e) {
-            throw illegalValue(val, Dimension.class, e);
+            throw illegalValue(val, Insets.class, e);
         }
     }
 

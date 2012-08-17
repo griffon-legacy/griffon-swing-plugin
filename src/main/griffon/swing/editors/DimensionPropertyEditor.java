@@ -99,7 +99,7 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
 
     private int parse(String val) {
         try {
-            return Integer.parseInt(String.valueOf(val).trim());
+            return Integer.parseInt(val.trim());
         } catch (NumberFormatException e) {
             throw illegalValue(val, Dimension.class, e);
         }

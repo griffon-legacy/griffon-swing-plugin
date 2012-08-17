@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Alexander Klein
  * @since 1.1.0
  */
-public class PointPropertyEditor extends AbstractPropertyEditor {
+public class RectanglePropertyEditor extends AbstractPropertyEditor {
     public void setAsText(String text) throws IllegalArgumentException {
         setValue(text);
     }
@@ -40,52 +40,48 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
             handleAsList((List) value);
         } else if (value instanceof Map) {
             handleAsMap((Map) value);
-        } else if (value instanceof Number) {
-            handleAsNumber((Number) value);
-        } else if (value instanceof Point) {
+        } else if (value instanceof Rectangle) {
             super.setValue(value);
         } else {
-            throw illegalValue(value, Point.class);
+            throw illegalValue(value, Rectangle.class);
         }
     }
 
     private void handleAsString(String str) {
         String[] parts = str.split(",");
         switch (parts.length) {
-            case 1:
-                int s = parseValue(parts[0]);
-                super.setValue(new Point(s, s));
-                break;
-            case 2:
+            case 4:
                 int x = parseValue(parts[0]);
                 int y = parseValue(parts[1]);
-                super.setValue(new Point(x, y));
+                int w = parseValue(parts[2]);
+                int h = parseValue(parts[3]);
+                super.setValue(new Rectangle(x, y, w, h));
                 break;
             default:
-                throw illegalValue(str, Point.class);
+                throw illegalValue(str, Rectangle.class);
         }
     }
 
     private void handleAsList(List list) {
         switch (list.size()) {
-            case 1:
-                int s = parseValue(list.get(0));
-                super.setValue(new Point(s, s));
-                break;
-            case 2:
+            case 4:
                 int x = parseValue(list.get(0));
                 int y = parseValue(list.get(1));
-                super.setValue(new Point(x, y));
+                int w = parseValue(list.get(2));
+                int h = parseValue(list.get(3));
+                super.setValue(new Rectangle(x, y, w, h));
                 break;
             default:
-                throw illegalValue(list, Point.class);
+                throw illegalValue(list, Rectangle.class);
         }
     }
 
     private void handleAsMap(Map map) {
         int x = getMapValue(map, "x", 0);
         int y = getMapValue(map, "y", 0);
-        super.setValue(new Point(x, y));
+        int w = getMapValue(map, "width", 0);
+        int h = getMapValue(map, "height", 0);
+        super.setValue(new Rectangle(x, y, w, h));
     }
 
     private int parseValue(Object value) {
@@ -94,14 +90,14 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Number) {
             return parse((Number) value);
         }
-        throw illegalValue(value, Point.class);
+        throw illegalValue(value, Rectangle.class);
     }
 
     private int parse(String val) {
         try {
             return Integer.parseInt(val.trim());
         } catch (NumberFormatException e) {
-            throw illegalValue(val, Point.class, e);
+            throw illegalValue(val, Rectangle.class, e);
         }
     }
 
@@ -111,6 +107,7 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
 
     private int getMapValue(Map map, String key, int defaultValue) {
         Object val = map.get(key);
+        if (null == val) val = map.get(String.valueOf(key.charAt(0)));
         if (null == val) {
             return defaultValue;
         } else if (val instanceof CharSequence) {
@@ -118,11 +115,6 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
         } else if (val instanceof Number) {
             return parse((Number) val);
         }
-        throw illegalValue(map, Point.class);
-    }
-
-    private void handleAsNumber(Number value) {
-        int s = parse(value);
-        super.setValue(new Point(s, s));
+        throw illegalValue(map, Rectangle.class);
     }
 }
