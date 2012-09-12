@@ -16,7 +16,6 @@
 package griffon.swing;
 
 import griffon.util.RunnableWithArgs;
-import griffon.util.RunnableWithArgsClosure;
 import groovy.lang.Closure;
 
 import javax.swing.*;
@@ -31,14 +30,20 @@ import static griffon.util.GriffonNameUtils.isBlank;
  * @since 0.9.3
  */
 public class SwingAction extends AbstractAction {
-    private final Closure closure;
+    private final Runnable runnable;
 
-    public SwingAction(Closure closure) {
-        this.closure = closure;
+    public SwingAction(Runnable runnable) {
+        this.runnable = runnable;
     }
 
     public final void actionPerformed(ActionEvent evt) {
-        closure.call(evt);
+        if (runnable instanceof RunnableWithArgs) {
+            ((RunnableWithArgs) runnable).run(new Object[]{evt});
+        } else if (runnable instanceof Closure) {
+            ((Closure) runnable).call(evt);
+        } else {
+            runnable.run();
+        }
     }
 
     public static ActionBuilder action() {
@@ -68,12 +73,14 @@ public class SwingAction extends AbstractAction {
         private String command;
         private Icon smallIcon;
         private Icon largeIcon;
-        private Closure closure;
+        private Runnable runnable;
         private boolean enabled = true;
+        private boolean selected = false;
 
         private Action action;
         private boolean mnemonicSet = false;
         private boolean enabledSet = false;
+        private boolean selectedSet = false;
 
         public ActionBuilder() {
             this(null);
@@ -135,13 +142,18 @@ public class SwingAction extends AbstractAction {
             return this;
         }
 
-        public ActionBuilder withClosure(Closure closure) {
-            this.closure = closure;
+        public ActionBuilder withClosure(Closure runnable) {
+            this.runnable = runnable;
+            return this;
+        }
+
+        public ActionBuilder withRunnable(Runnable runnable) {
+            if (runnable != null) this.runnable = runnable;
             return this;
         }
 
         public ActionBuilder withRunnable(RunnableWithArgs runnable) {
-            if (runnable != null) this.closure = new RunnableWithArgsClosure(runnable);
+            if (runnable != null) this.runnable = runnable;
             return this;
         }
 
@@ -151,22 +163,27 @@ public class SwingAction extends AbstractAction {
             return this;
         }
 
+        public ActionBuilder withSelected(boolean selected) {
+            this.selected = selected;
+            this.enabledSet = true;
+            return this;
+        }
+
         public Action build() {
-            if (closure == null && action == null) {
+            if (runnable == null && action == null) {
                 throw new IllegalArgumentException("Either closure: or action: must have a value.");
             }
-            if (action == null) action = new SwingAction(closure);
+            if (action == null) action = new SwingAction(runnable);
             if (!isBlank(command)) action.putValue(Action.ACTION_COMMAND_KEY, command);
             if (!isBlank(name)) action.putValue(Action.NAME, name);
-            if (mnemonicSet) {
-                action.putValue(Action.MNEMONIC_KEY, mnemonic);
-            }
+            if (mnemonicSet) action.putValue(Action.MNEMONIC_KEY, mnemonic);
             if (accelerator != null) action.putValue(Action.ACCELERATOR_KEY, accelerator);
             if (largeIcon != null) action.putValue(Action.LARGE_ICON_KEY, largeIcon);
             if (smallIcon != null) action.putValue(Action.SMALL_ICON, smallIcon);
             if (!isBlank(longDescription)) action.putValue(Action.LONG_DESCRIPTION, longDescription);
             if (!isBlank(shortDescription)) action.putValue(Action.SHORT_DESCRIPTION, shortDescription);
             if (enabledSet) action.setEnabled(enabled);
+            if (selectedSet) action.putValue(Action.SELECTED_KEY, selected);
             return action;
         }
     }

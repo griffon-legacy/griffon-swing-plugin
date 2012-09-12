@@ -18,8 +18,8 @@
  * @author Andres Almiray
  */
 class SwingGriffonPlugin {
-    String version = '1.0.1'
-    String griffonVersion = '1.0.1 > *'
+    String version = '1.1.0'
+    String griffonVersion = '1.1.0 > *'
     Map dependsOn = [:]
     List pluginIncludes = []
     String license = 'Apache Software License 2.0'
@@ -54,7 +54,7 @@ need to uncapitalize the first character, for example *GridLayout* becomes *grid
 ### Groovy Nodes
 
 The following nodes are provided by [SwingBuilder][1] too, however they have no direct relationship
-with a particualr Swing/AWT class.
+with a particular Swing/AWT class.
 
 #### widget
 TBD
