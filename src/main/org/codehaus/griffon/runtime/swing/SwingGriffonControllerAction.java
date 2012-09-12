@@ -66,7 +66,7 @@ public class SwingGriffonControllerAction extends AbstractGriffonControllerActio
                         } else if (KEY_ACCELERATOR.equals(evt.getPropertyName())) {
                             String accelerator = (String) evt.getNewValue();
                             if (!isBlank(accelerator)) {
-                                toolkitAction.putValue(Action.MNEMONIC_KEY, KeyStroke.getKeyStroke(accelerator));
+                                toolkitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(accelerator));
                             }
                         } else if (KEY_SMALL_ICON.equals(evt.getPropertyName())) {
                             final String smallIcon = (String) evt.getNewValue();
@@ -74,9 +74,9 @@ public class SwingGriffonControllerAction extends AbstractGriffonControllerActio
                                 toolkitAction.putValue(Action.SMALL_ICON, new ImageIcon(smallIcon));
                             }
                         } else if (KEY_LARGE_ICON.equals(evt.getPropertyName())) {
-                            final String smallIcon = (String) evt.getNewValue();
-                            if (!isBlank(smallIcon)) {
-                                toolkitAction.putValue(Action.LARGE_ICON_KEY, new ImageIcon(smallIcon));
+                            final String largeIcon = (String) evt.getNewValue();
+                            if (!isBlank(largeIcon)) {
+                                toolkitAction.putValue(Action.LARGE_ICON_KEY, new ImageIcon(largeIcon));
                             }
                         }
                     }
