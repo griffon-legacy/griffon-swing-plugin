@@ -18,20 +18,19 @@ package griffon.swing.editors;
 
 import griffon.core.resources.editors.AbstractPropertyEditor;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Andres Almiray
- * @author Alexander Klein
- * @since 1.1.0
+ * @since 1.2.0
  */
-public class DimensionPropertyEditor extends AbstractPropertyEditor {
+public class Point2DPropertyEditor extends AbstractPropertyEditor {
     public String getAsText() {
         if (null == getValue()) return null;
-        Dimension dimension = (Dimension) getValue();
-        return dimension.getWidth() + ", " + dimension.getHeight();
+        Point2D p = (Point2D) getValue();
+        return p.getX() + ", " + p.getY();
     }
 
     public void setAsText(String text) throws IllegalArgumentException {
@@ -48,10 +47,10 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
             handleAsMap((Map) value);
         } else if (value instanceof Number) {
             handleAsNumber((Number) value);
-        } else if (value instanceof Dimension) {
+        } else if (value instanceof Point2D) {
             super.setValue(value);
         } else {
-            throw illegalValue(value, Dimension.class);
+            throw illegalValue(value, Point2D.class);
         }
     }
 
@@ -59,65 +58,64 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         String[] parts = str.split(",");
         switch (parts.length) {
             case 1:
-                int s = parseValue(parts[0]);
-                super.setValue(new Dimension(s, s));
+                double s = parseValue(parts[0]);
+                super.setValue(new Point2D.Double(s, s));
                 break;
             case 2:
-                int w = parseValue(parts[0]);
-                int h = parseValue(parts[1]);
-                super.setValue(new Dimension(w, h));
+                double x = parseValue(parts[0]);
+                double y = parseValue(parts[1]);
+                super.setValue(new Point2D.Double(x, y));
                 break;
             default:
-                throw illegalValue(str, Dimension.class);
+                throw illegalValue(str, Point2D.class);
         }
     }
 
     private void handleAsList(List list) {
         switch (list.size()) {
             case 1:
-                int s = parseValue(list.get(0));
-                super.setValue(new Dimension(s, s));
+                double s = parseValue(list.get(0));
+                super.setValue(new Point2D.Double(s, s));
                 break;
             case 2:
-                int w = parseValue(list.get(0));
-                int h = parseValue(list.get(1));
-                super.setValue(new Dimension(w, h));
+                double x = parseValue(list.get(0));
+                double y = parseValue(list.get(1));
+                super.setValue(new Point2D.Double(x, y));
                 break;
             default:
-                throw illegalValue(list, Dimension.class);
+                throw illegalValue(list, Point2D.class);
         }
     }
 
     private void handleAsMap(Map map) {
-        int w = getMapValue(map, "width", 0);
-        int h = getMapValue(map, "height", 0);
-        super.setValue(new Dimension(w, h));
+        double x = getMapValue(map, "x", 0);
+        double y = getMapValue(map, "y", 0);
+        super.setValue(new Point2D.Double(x, y));
     }
 
-    private int parseValue(Object value) {
+    private double parseValue(Object value) {
         if (value instanceof CharSequence) {
             return parse(String.valueOf(value));
         } else if (value instanceof Number) {
             return parse((Number) value);
         }
-        throw illegalValue(value, Dimension.class);
+        throw illegalValue(value, Point2D.class);
     }
 
-    private int parse(String val) {
+    private double parse(String val) {
         try {
-            return Integer.parseInt(val.trim());
+            return Double.parseDouble(val.trim());
         } catch (NumberFormatException e) {
-            throw illegalValue(val, Dimension.class, e);
+            throw illegalValue(val, Point2D.class, e);
         }
     }
 
-    private int parse(Number val) {
-        return val.intValue();
+    private double parse(Number val) {
+        return val.doubleValue();
     }
 
-    private int getMapValue(Map map, String key, int defaultValue) {
+    private double getMapValue(Map map, String key, int defaultValue) {
         Object val = map.get(key);
-        if (null == val) val = map.get(String.valueOf(key.charAt(0)));
         if (null == val) {
             return defaultValue;
         } else if (val instanceof CharSequence) {
@@ -125,11 +123,11 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         } else if (val instanceof Number) {
             return parse((Number) val);
         }
-        throw illegalValue(map, Dimension.class);
+        throw illegalValue(map, Point2D.class);
     }
 
     private void handleAsNumber(Number value) {
-        int s = parse(value);
-        super.setValue(new Dimension(s, s));
+        double s = parse(value);
+        super.setValue(new Point2D.Double(s, s));
     }
 }

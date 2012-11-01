@@ -28,6 +28,12 @@ import java.util.Map;
  * @since 1.1.0
  */
 public class InsetsPropertyEditor extends AbstractPropertyEditor {
+    public String getAsText() {
+        if (null == getValue()) return null;
+        Insets i = (Insets) getValue();
+        return i.top + ", " + i.left + ", " + i.bottom + ", " + i.right;
+    }
+
     public void setAsText(String text) throws IllegalArgumentException {
         setValue(text);
     }

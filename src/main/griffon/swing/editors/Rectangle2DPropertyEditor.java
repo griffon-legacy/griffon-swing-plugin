@@ -18,20 +18,19 @@ package griffon.swing.editors;
 
 import griffon.core.resources.editors.AbstractPropertyEditor;
 
-import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author Andres Almiray
- * @author Alexander Klein
- * @since 1.1.0
+ * @since 1.2.0
  */
-public class DimensionPropertyEditor extends AbstractPropertyEditor {
+public class Rectangle2DPropertyEditor extends AbstractPropertyEditor {
     public String getAsText() {
         if (null == getValue()) return null;
-        Dimension dimension = (Dimension) getValue();
-        return dimension.getWidth() + ", " + dimension.getHeight();
+        Rectangle2D r = (Rectangle2D) getValue();
+        return r.getX() + ", " + r.getY() + ", " + r.getWidth() + ", " + r.getHeight();
     }
 
     public void setAsText(String text) throws IllegalArgumentException {
@@ -46,76 +45,72 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
             handleAsList((List) value);
         } else if (value instanceof Map) {
             handleAsMap((Map) value);
-        } else if (value instanceof Number) {
-            handleAsNumber((Number) value);
-        } else if (value instanceof Dimension) {
+        } else if (value instanceof Rectangle2D) {
             super.setValue(value);
         } else {
-            throw illegalValue(value, Dimension.class);
+            throw illegalValue(value, Rectangle2D.class);
         }
     }
 
     private void handleAsString(String str) {
         String[] parts = str.split(",");
         switch (parts.length) {
-            case 1:
-                int s = parseValue(parts[0]);
-                super.setValue(new Dimension(s, s));
-                break;
-            case 2:
-                int w = parseValue(parts[0]);
-                int h = parseValue(parts[1]);
-                super.setValue(new Dimension(w, h));
+            case 4:
+                double x = parseValue(parts[0]);
+                double y = parseValue(parts[1]);
+                double w = parseValue(parts[2]);
+                double h = parseValue(parts[3]);
+                super.setValue(new Rectangle2D.Double(x, y, w, h));
                 break;
             default:
-                throw illegalValue(str, Dimension.class);
+                throw illegalValue(str, Rectangle2D.class);
         }
     }
 
     private void handleAsList(List list) {
         switch (list.size()) {
-            case 1:
-                int s = parseValue(list.get(0));
-                super.setValue(new Dimension(s, s));
-                break;
-            case 2:
-                int w = parseValue(list.get(0));
-                int h = parseValue(list.get(1));
-                super.setValue(new Dimension(w, h));
+            case 4:
+                double x = parseValue(list.get(0));
+                double y = parseValue(list.get(1));
+                double w = parseValue(list.get(2));
+                double h = parseValue(list.get(3));
+                super.setValue(new Rectangle2D.Double(x, y, w, h));
                 break;
             default:
-                throw illegalValue(list, Dimension.class);
+                throw illegalValue(list, Rectangle2D.class);
         }
     }
 
     private void handleAsMap(Map map) {
-        int w = getMapValue(map, "width", 0);
-        int h = getMapValue(map, "height", 0);
-        super.setValue(new Dimension(w, h));
+        double x = getMapValue(map, "x", 0);
+        double y = getMapValue(map, "y", 0);
+        double w = getMapValue(map, "width", 0);
+        double h = getMapValue(map, "height", 0);
+        super.setValue(new Rectangle2D.Double(x, y, w, h));
     }
 
-    private int parseValue(Object value) {
+    private double parseValue(Object value) {
         if (value instanceof CharSequence) {
             return parse(String.valueOf(value));
         } else if (value instanceof Number) {
             return parse((Number) value);
         }
-        throw illegalValue(value, Dimension.class);
+        throw illegalValue(value, Rectangle2D.class);
     }
 
-    private int parse(String val) {
+    private double parse(String val) {
         try {
-            return Integer.parseInt(val.trim());
+            return Double.parseDouble(val.trim());
         } catch (NumberFormatException e) {
-            throw illegalValue(val, Dimension.class, e);
+            throw illegalValue(val, Rectangle2D.class, e);
         }
     }
 
-    private int parse(Number val) {
-        return val.intValue();
+    private double parse(Number val) {
+        return val.doubleValue();
     }
 
-    private int getMapValue(Map map, String key, int defaultValue) {
+    private double getMapValue(Map map, String key, double defaultValue) {
         Object val = map.get(key);
         if (null == val) val = map.get(String.valueOf(key.charAt(0)));
         if (null == val) {
@@ -125,11 +120,6 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         } else if (val instanceof Number) {
             return parse((Number) val);
         }
-        throw illegalValue(map, Dimension.class);
-    }
-
-    private void handleAsNumber(Number value) {
-        int s = parse(value);
-        super.setValue(new Dimension(s, s));
+        throw illegalValue(map, Rectangle2D.class);
     }
 }

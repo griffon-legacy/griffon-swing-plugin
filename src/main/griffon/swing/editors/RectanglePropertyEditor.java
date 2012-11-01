@@ -28,6 +28,12 @@ import java.util.Map;
  * @since 1.1.0
  */
 public class RectanglePropertyEditor extends AbstractPropertyEditor {
+    public String getAsText() {
+        if (null == getValue()) return null;
+        Rectangle r = (Rectangle) getValue();
+        return r.getX() + ", " + r.getY() + ", " + r.getWidth() + ", " + r.getHeight();
+    }
+
     public void setAsText(String text) throws IllegalArgumentException {
         setValue(text);
     }

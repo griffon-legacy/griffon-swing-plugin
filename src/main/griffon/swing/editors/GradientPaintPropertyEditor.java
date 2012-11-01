@@ -28,6 +28,26 @@ import java.util.Map;
  * @since 1.1.0
  */
 public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
+    public String getAsText() {
+        if (null == getValue()) return null;
+        GradientPaint p = (GradientPaint) getValue();
+        return new StringBuilder()
+            .append(p.getPoint1().getX())
+            .append(", ")
+            .append(p.getPoint1().getY())
+            .append(", ")
+            .append(ColorPropertyEditor.format(p.getColor1()))
+            .append(", ")
+            .append(p.getPoint2().getX())
+            .append(", ")
+            .append(p.getPoint2().getY())
+            .append(", ")
+            .append(ColorPropertyEditor.format(p.getColor2()))
+            .append(", ")
+            .append(p.isCyclic())
+            .toString();
+    }
+
     public void setAsText(String text) throws IllegalArgumentException {
         setValue(text);
     }
@@ -80,7 +100,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
                 super.setValue(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
                 break;
             default:
-                throw illegalValue(str, Insets.class);
+                throw illegalValue(str, GradientPaint.class);
         }
     }
 
@@ -116,7 +136,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
                 super.setValue(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
                 break;
             default:
-                throw illegalValue(list, Insets.class);
+                throw illegalValue(list, GradientPaint.class);
         }
     }
 
@@ -162,7 +182,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
 
     private float parse(String val) {
         try {
-            return Float.parseFloat(String.valueOf(val));
+            return Float.parseFloat(String.valueOf(val).trim());
         } catch (NumberFormatException e) {
             throw illegalValue(val, GradientPaint.class, e);
         }
@@ -170,7 +190,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
 
     private boolean parseBoolean(String val) {
         try {
-            return Boolean.parseBoolean(val);
+            return Boolean.parseBoolean(val.trim());
         } catch (Exception e) {
             throw illegalValue(val, GradientPaint.class, e);
         }

@@ -18,7 +18,7 @@
  * @author Andres Almiray
  */
 class SwingGriffonPlugin {
-    String version = '1.1.0'
+    String version = '1.2.0'
     String griffonVersion = '1.1.0 > *'
     Map dependsOn = [:]
     List pluginIncludes = []
@@ -39,7 +39,7 @@ class SwingGriffonPlugin {
 Enables the usage of Swing based components in Views.
 
 Usage
-----
+-----
 This plugin enables the usage of the following nodes inside a View.
 
 ### Swing Nodes
@@ -56,22 +56,38 @@ need to uncapitalize the first character, for example *GridLayout* becomes *grid
 The following nodes are provided by [SwingBuilder][1] too, however they have no direct relationship
 with a particular Swing/AWT class.
 
-#### widget
-TBD
+ * widget
+ * container
+ * bean
+ * noparent
+ * application
 
-#### container
-TBD
+### Property Editors
 
-#### bean
-TBD
+This plugin contributes the following property editors
 
-#### noparent
-TBD
+| *Type*                       | *Format*                                            |
+| ---------------------------- | --------------------------------------------------- |
+| java.awt.Color               | #F00 ; red, green, blue, alpha ; Color constant     |
+| java.awt.Dimension           | width, height                                       |
+| java.awt.Font                | family-style-size                                   |
+| java.awt.GradientPaint       | x1, y1, #F00, x2, y2, #00F                          |
+| java.awt.Image               | path/to/image_file                                  |
+| java.awt.Insets              | top, left, bottom, right                            |
+| java.awt.LinearGradientPaint | xy, y1, x2, x2, [0.0, 1.0], [#F00, #00F], REPEAT    |
+| java.awt.Point               | x, y                                                |
+| java.awt.RadialGradientPaint | xy, y1, r, fx, fy, [0.0, 1.0], [#F00, #00F], REPEAT |
+| java.awt.Rectangle           | x, y, width, height                                 |
+| java.awt.geom.Point2D        | x, y                                                |
+| java.awt.geom.Rectangle2D    | x, y , width, height                                |
+| javax.swing.Icon             | path/to/image_file                                  |
 
-### Griffon Nodes
+The following styles are supported by `FontPropertyEditor`
 
-#### application
-TBD
+ * BOLD
+ * ITALIC
+ * BOLDITALIC
+ * PLAIN
 
 Configuration
 -------------

@@ -30,6 +30,19 @@ import java.util.Map;
  * @since 1.1.0
  */
 public class ColorPropertyEditor extends AbstractPropertyEditor {
+    public static String format(Color color) {
+        return "#" +
+            Integer.toHexString(color.getRed()) +
+            Integer.toHexString(color.getBlue()) +
+            Integer.toHexString(color.getGreen()) +
+            Integer.toHexString(color.getAlpha());
+    }
+
+    public String getAsText() {
+        if (null == getValue()) return null;
+        return format((Color) getValue());
+    }
+
     public void setAsText(String text) throws IllegalArgumentException {
         setValue(text);
     }
@@ -37,7 +50,7 @@ public class ColorPropertyEditor extends AbstractPropertyEditor {
     public void setValue(Object value) {
         if (null == value) return;
         if (value instanceof CharSequence) {
-            handleAsString(String.valueOf(value));
+            handleAsString(String.valueOf(value).trim());
         } else if (value instanceof List) {
             handleAsList((List) value);
         } else if (value instanceof Map) {
@@ -60,67 +73,67 @@ public class ColorPropertyEditor extends AbstractPropertyEditor {
             switch (str.length()) {
                 case 4:
                     r = parse(new StringBuilder()
-                            .append(str.charAt(1))
-                            .append(str.charAt(1))
-                            .toString().toUpperCase());
+                        .append(str.charAt(1))
+                        .append(str.charAt(1))
+                        .toString().toUpperCase());
                     g = parse(new StringBuilder()
-                            .append(str.charAt(2))
-                            .append(str.charAt(2))
-                            .toString().toUpperCase());
+                        .append(str.charAt(2))
+                        .append(str.charAt(2))
+                        .toString().toUpperCase());
                     b = parse(new StringBuilder()
-                            .append(str.charAt(3))
-                            .append(str.charAt(3))
-                            .toString().toUpperCase());
+                        .append(str.charAt(3))
+                        .append(str.charAt(3))
+                        .toString().toUpperCase());
                     break;
                 case 5:
                     r = parse(new StringBuilder()
-                            .append(str.charAt(1))
-                            .append(str.charAt(1))
-                            .toString().toUpperCase());
+                        .append(str.charAt(1))
+                        .append(str.charAt(1))
+                        .toString().toUpperCase());
                     g = parse(new StringBuilder()
-                            .append(str.charAt(2))
-                            .append(str.charAt(2))
-                            .toString().toUpperCase());
+                        .append(str.charAt(2))
+                        .append(str.charAt(2))
+                        .toString().toUpperCase());
                     b = parse(new StringBuilder()
-                            .append(str.charAt(3))
-                            .append(str.charAt(3))
-                            .toString().toUpperCase());
+                        .append(str.charAt(3))
+                        .append(str.charAt(3))
+                        .toString().toUpperCase());
                     a = parse(new StringBuilder()
-                            .append(str.charAt(4))
-                            .append(str.charAt(4))
-                            .toString().toUpperCase());
+                        .append(str.charAt(4))
+                        .append(str.charAt(4))
+                        .toString().toUpperCase());
                     break;
                 case 7:
                     r = parse(new StringBuilder()
-                            .append(str.charAt(1))
-                            .append(str.charAt(2))
-                            .toString().toUpperCase());
+                        .append(str.charAt(1))
+                        .append(str.charAt(2))
+                        .toString().toUpperCase());
                     g = parse(new StringBuilder()
-                            .append(str.charAt(3))
-                            .append(str.charAt(4))
-                            .toString().toUpperCase());
+                        .append(str.charAt(3))
+                        .append(str.charAt(4))
+                        .toString().toUpperCase());
                     b = parse(new StringBuilder()
-                            .append(str.charAt(5))
-                            .append(str.charAt(6))
-                            .toString().toUpperCase());
+                        .append(str.charAt(5))
+                        .append(str.charAt(6))
+                        .toString().toUpperCase());
                     break;
                 case 9:
                     r = parse(new StringBuilder()
-                            .append(str.charAt(1))
-                            .append(str.charAt(2))
-                            .toString().toUpperCase());
+                        .append(str.charAt(1))
+                        .append(str.charAt(2))
+                        .toString().toUpperCase());
                     g = parse(new StringBuilder()
-                            .append(str.charAt(3))
-                            .append(str.charAt(4))
-                            .toString().toUpperCase());
+                        .append(str.charAt(3))
+                        .append(str.charAt(4))
+                        .toString().toUpperCase());
                     b = parse(new StringBuilder()
-                            .append(str.charAt(5))
-                            .append(str.charAt(6))
-                            .toString().toUpperCase());
+                        .append(str.charAt(5))
+                        .append(str.charAt(6))
+                        .toString().toUpperCase());
                     a = parse(new StringBuilder()
-                            .append(str.charAt(7))
-                            .append(str.charAt(8))
-                            .toString().toUpperCase());
+                        .append(str.charAt(7))
+                        .append(str.charAt(8))
+                        .toString().toUpperCase());
                     break;
                 default:
                     throw illegalValue(str, Color.class);
@@ -165,12 +178,12 @@ public class ColorPropertyEditor extends AbstractPropertyEditor {
             }
         }
         super.setValue(
-                new Color(
-                        (Integer) values.get(0),
-                        (Integer) values.get(1),
-                        (Integer) values.get(2),
-                        (Integer) values.get(3)
-                )
+            new Color(
+                (Integer) values.get(0),
+                (Integer) values.get(1),
+                (Integer) values.get(2),
+                (Integer) values.get(3)
+            )
         );
     }
 
