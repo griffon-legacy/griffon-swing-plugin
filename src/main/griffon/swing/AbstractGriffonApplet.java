@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package griffon.swing;
 
 import griffon.core.*;
@@ -29,7 +30,7 @@ import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.util.ConfigObject;
 import groovy.util.FactoryBuilderSupport;
-import org.codehaus.griffon.runtime.core.EventRouter;
+import org.codehaus.griffon.runtime.core.NoopEventRouter;
 import org.codehaus.griffon.runtime.core.ResourceLocator;
 import org.codehaus.griffon.runtime.util.GriffonApplicationHelper;
 import org.codehaus.griffon.runtime.util.MVCGroupExceptionHandler;
@@ -68,10 +69,10 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
 
     private Locale locale = Locale.getDefault();
     public static final String[] EMPTY_ARGS = new String[0];
-    protected final Object lock = new Object();
+    protected final Object[] lock = new Object[0];
     private ApplicationPhase phase = ApplicationPhase.INITIALIZE;
+    private EventRouter eventRouter = new NoopEventRouter();
 
-    private final EventRouter eventRouter = new EventRouter();
     private final ResourceLocator resourceLocator = new ResourceLocator();
     private final List<ShutdownHandler> shutdownHandlers = new ArrayList<ShutdownHandler>();
     private final String[] startupArgs;
@@ -112,6 +113,14 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
     }
 
     // ------------------------------------------------------
+
+    public EventRouter getEventRouter() {
+        return eventRouter;
+    }
+
+    public void setEventRouter(EventRouter eventRouter) {
+        this.eventRouter = eventRouter;
+    }
 
     public Binding getBindings() {
         return bindings;
