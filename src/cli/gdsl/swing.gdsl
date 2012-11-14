@@ -18,130 +18,178 @@
 import com.intellij.patterns.*
 import com.intellij.openapi.diagnostic.*
 
+import groovy.swing.impl.TableLayout
+import groovy.swing.impl.TableLayoutCell
+import groovy.swing.impl.TableLayoutRow
+
+import java.beans.Introspector
+import javax.swing.table.TableColumn
+import javax.swing.table.TableModel
+import java.awt.*
+import javax.swing.*
+import javax.swing.border.*
+
 /**
  * @author Kasper Fock
  * @author David Askirk
  * @author Peter Gromov
  * @author Andres Almiray
  */
-
-def addNodeContributions = { on ->
-    on.with {
-        method name: 'application', type: 'javax.swing.JFrame'
-
-        method name: 'action', type: 'javax.swing.Action'
-        method name: 'actions', type: 'java.util.List', params: [closure: 'groovy.lang.Closure']
-        method name: 'map', type: 'java.util.Map'
-        method name: 'imageIcon', type: 'javax.swing.ImageIcon'
-        method name: 'buttonGroup', type: 'javax.swing.ButtonGroup'
-        method name: 'noparent', type: 'void', params: [closure: 'groovy.lang.Closure']
-        method name: 'widget', type: 'java.awt.Component'
-        method name: 'container', type: 'java.awt.Container', params: [closure: 'groovy.lang.Closure']
-        method name: 'bean', type: 'java.lang.Object'
-        method name: 'bind', type: 'java.lang.Object'
-
-        method name: 'dialog', type: 'javax.swing.JDialog', params: [closure: 'groovy.lang.Closure']
-        method name: 'fileChooser', type: 'javax.swing.JFileChooser', params: [closure: 'groovy.lang.Closure']
-        method name: 'frame', type: 'javax.swing.JFrame', params: [closure: 'groovy.lang.Closure']
-        method name: 'optionPane', type: 'javax.swing.JOptionPane', params: [closure: 'groovy.lang.Closure']
-        method name: 'window', type: 'javax.swing.JWindow', params: [closure: 'groovy.lang.Closure']
-
-        method name: 'button', type: 'javax.swing.JButton'
-        method name: 'checkBox', type: 'javax.swing.JCheckBox'
-        method name: 'checkBoxMenuItem', type: 'javax.swing.JCheckBoxMenuItem'
-        method name: 'menuItem', type: 'javax.swing.JMenuItem'
-        method name: 'radioButton', type: 'javax.swing.JRadioButton'
-        method name: 'radioButtonMenuItem', type: 'javax.swing.JRadioButtonMenuItem'
-        method name: 'toggleButton', type: 'javax.swing.JToggleButton'
-
-        method name: 'editorPane', type: 'javax.swing.JEditorPane'
-        method name: 'label', type: 'javax.swing.JLabel'
-        method name: 'passwordField', type: 'javax.swing.JPasswordField'
-        method name: 'textArea', type: 'javax.swing.JTextArea'
-        method name: 'textField', type: 'javax.swing.JTextField'
-        method name: 'formattedTextField', type: 'javax.swing.JFormattedTextField'
-        method name: 'textPane', type: 'javax.swing.JTextPane'
-
-        method name: 'desktopPane', type: 'javax.swing.JDesktopPane'
-        method name: 'internalFrame', type: 'javax.swing.JInternalFrame'
-
-        method name: 'colorChooser', type: 'javax.swing.JColorChooser'
-        method name: 'comboBox', type: 'javax.swing.JComboBox'
-        method name: 'list', type: 'javax.swing.JList'
-        method name: 'progressBar', type: 'javax.swing.JProgressBar'
-        method name: 'separator', type: 'javax.swing.JSeparator'
-        method name: 'scrollBar', type: 'javax.swing.JScrollBar'
-        method name: 'slider', type: 'javax.swing.JSlider'
-        method name: 'spinner', type: 'javax.swing.JSpinner'
-        method name: 'tree', type: 'javax.swing.JTree'
-
-        method name: 'menu', type: 'javax.swing.JMenu', params: [closure: 'groovy.lang.Closure']
-        method name: 'menuBar', type: 'javax.swing.JMenuBar', params: [closure: 'groovy.lang.Closure']
-        method name: 'popupMenu', type: 'javax.swing.JPopupMenu', params: [closure: 'groovy.lang.Closure']
-
-        method name: 'panel', type: 'javax.swing.JPanel', params: [closure: 'groovy.lang.Closure']
-        method name: 'scrollPane', type: 'javax.swing.JScrollPane', params: [closure: 'groovy.lang.Closure']
-        method name: 'splitPane', type: 'javax.swing.JSplitPane', params: [closure: 'groovy.lang.Closure']
-        method name: 'tabbedPane', type: 'javax.swing.JTabbedPane'
-        method name: 'toolBar', type: 'javax.swing.JToolBar'
-        method name: 'viewport', type: 'javax.swing.JViewPort'
-        method name: 'layeredPane', type: 'javax.swing.JLayeredPane'
-
-        method name: 'boundedRangeModel', type: 'javax.swing.DefaultBoundedRangeModel'
-        method name: 'spinnerDateModel', type: 'javax.swing.SpinnerDateModel'
-        method name: 'spinnerListModel', type: 'javax.swing.SpinnerListModel'
-        method name: 'spinnerNumberModel', type: 'javax.swing.SpinnerNumberModel'
-
-        method name: 'table', type: 'javax.swing.JTable', params: [closure: 'groovy.lang.Closure']
-        method name: 'tableColumn', type: 'javax.swing.table.TableColumn'
-        method name: 'tableModel', type: 'javax.swing.table.TableModel'
-        method name: 'propertyColumn', type: 'void'
-        method name: 'closureColumn', type: 'void'
-
-        method name: 'borderLayout', type: 'java.awt.BorderLayout', params: [hgap: 'int', vgap: 'int']
-        method name: 'cardLayout', type: 'java.awt.CardLayout'
-        method name: 'flowLayout', type: 'java.awt.FlowLayout'
-        method name: 'gridLayout', type: 'java.awt.GridLayout', params: [rows: 'int', cols: 'int']
-        method name: 'overlayLayout', type: 'javax.swing.OverlayLayout'
-        method name: 'springLayout', type: 'javax.swing.SpringLayout'
-        method name: 'gridBagLayout', type: 'java.awt.GridBagLayout'
-        method name: 'gridBagConstraints', type: 'java.awt.GridBagConstraints'
-        method name: 'gbc', type: 'java.awt.GridBagConstraints'
-
-        method name: 'box', type: 'javax.swing.Box'
-        method name: 'boxLayout', type: 'javax.swing.BoxLayout'
-        method name: 'hbox', type: 'javax.swing.Box'
-        method name: 'hglue', type: 'java.awt.Component'
-        method name: 'hstrut', type: 'java.awt.Component'
-        method name: 'vbox', type: 'javax.swing.Box'
-        method name: 'vglue', type: 'java.awt.Component'
-        method name: 'vstrut', type: 'java.awt.Component'
-        method name: 'glue', type: 'java.awt.Component'
-        method name: 'rigidArea', type: 'java.awt.Component'
-
-        method name: 'tableLayout', type: 'groovy.swing.impl.TableLayout'
-        method name: 'tr', type: 'groovy.swing.impl.TableLayoutRow'
-        method name: 'td', type: 'groovy.swing.impl.TableLayoutCell'
-
-        method name: 'lineBorder', type: 'javax.swing.border.LineBorder'
-        method name: 'loweredBevelBorder', type: 'javax.swing.border.BevelBorder'
-        method name: 'raisedBevelBorder', type: 'javax.swing.border.BevelBorder'
-        method name: 'etchedBorder', type: 'javax.swing.border.EtchedBorder'
-        method name: 'loweredEtchedBorder', type: 'javax.swing.border.EtchedBorder'
-        method name: 'raisedEtchedBorder', type: 'javax.swing.border.EtchedBorder'
-        method name: 'titledBorder', type: 'javax.swing.border.TitledBorder'
-        method name: 'emptyBorder', type: 'javax.swing.border.EmptyBorder'
-        method name: 'compoundBorder', type: 'javax.swing.border.CompoundBorder'
-        method name: 'matteBorder', type: 'javax.swing.border.MatteBorder'
-
-        method name: 'shortcut', type: 'javax.swing.KeyStroke', params: [key: 'java.lang.String']
-        method name: 'shortcut', type: 'javax.swing.KeyStroke', params: [key: 'java.lang.String', modifier: 'int']
-        method name: 'keyStrokeAction', type: 'void'
-
-        method name: 'edt', type: 'void', params: [closure: 'groovy.lang.Closure']
-        method name: 'doLater', type: 'void', params: [closure: 'groovy.lang.Closure']
-        method name: 'doOutside', type: 'void', params: [closure: 'groovy.lang.Closure']
+private java.util.List defaultNodeNamedParams(receiver, Class target) {
+    java.util.List params = []
+    Introspector.getBeanInfo(target).propertyDescriptors.each { p ->
+        if (p.propertyType && !p.propertyType.isArray()) params << receiver.parameter(name: p.name, type: p.propertyType.name)
     }
+    params
+}
+
+private java.util.List defaultWidgetNodeNamedParams(receiver, Class target) {
+    java.util.List params = []
+    Introspector.getBeanInfo(target).eventSetDescriptors.each { e ->
+        e.listenerType.methods.each { m ->
+            params << receiver.parameter(name: m.name, type: 'groovy.lang.Closure')
+        }
+    }
+    params
+}
+
+def baseBuilderNode = { receiver, String name, Class type, Map params = [:], java.util.List namedParams = [] ->
+    Map args = [name: name, type: type, params: params]
+    args.namedParams = [receiver.parameter(name: 'id', type: String)] + namedParams
+    receiver.method(args)
+}
+
+def builderNode = { receiver, String name, Class type, Map params = [:], java.util.List namedParams = [] ->
+    namedParams.addAll(defaultNodeNamedParams(receiver, type))
+    baseBuilderNode(receiver, name, type, params, namedParams)
+}
+
+def widgetNode = { receiver, String name, Class type, Map params = [:], java.util.List namedParams = [] ->
+    namedParams << receiver.parameter(name: 'constraints', type: Object)
+    namedParams.addAll(defaultWidgetNodeNamedParams(receiver, type))
+    builderNode(receiver, name, type, params, namedParams)
+}
+
+def containerNode = { receiver, String name, Class type, Map params = [:], java.util.List namedParams = [] ->
+    params += [children: Closure]
+    widgetNode(receiver, name, type, params, namedParams)
+}
+
+def addNodeContributions = { receiver ->
+    containerNode(receiver, 'application', JFrame)
+    builderNode(receiver, 'action', Action)
+    builderNode(receiver, 'actions', java.util.List, [closure: 'groovy.lang.Closure'])
+    builderNode(receiver, 'map', Map)
+    widgetNode(receiver, 'imageIcon', ImageIcon)
+    widgetNode(receiver, 'buttonGroup', ButtonGroup)
+    receiver.method name: 'noparent', type: 'void', params: [closure: 'groovy.lang.Closure']
+    containerNode(receiver, 'container', Container)
+    widgetNode(receiver, 'widget', JComponent)
+    builderNode(receiver, 'bean', Object)
+    builderNode(receiver, 'bind', Object, [:], [
+        receiver.parameter(name: 'source', type: Object),
+        receiver.parameter(name: 'target', type: Object),
+        receiver.parameter(name: 'sourceProperty', type: String),
+        receiver.parameter(name: 'targetProperty', type: String),
+        receiver.parameter(name: 'converter', type: Closure),
+        receiver.parameter(name: 'reverseConverter', type: Closure),
+        receiver.parameter(name: 'validator', type: Closure),
+        receiver.parameter(name: 'mutual', type: boolean)
+    ])
+
+    containerNode(receiver, 'dialog', JDialog)
+    containerNode(receiver, 'fileChooser', JFileChooser)
+    containerNode(receiver, 'frame', JFrame)
+    containerNode(receiver, 'optionPane', JOptionPane)
+    containerNode(receiver, 'window', JWindow)
+
+    widgetNode(receiver, 'button', JButton)
+    widgetNode(receiver, 'checkBox', JCheckBox)
+    widgetNode(receiver, 'checkBoxMenuItem', JCheckBoxMenuItem)
+    widgetNode(receiver, 'menuItem', JMenuItem)
+    widgetNode(receiver, 'radioButton', JRadioButton)
+    widgetNode(receiver, 'radioButtonMenuItem', JRadioButtonMenuItem)
+    widgetNode(receiver, 'toggleButton', JToggleButton)
+
+    widgetNode(receiver, 'editorPane', JEditorPane)
+    widgetNode(receiver, 'label', JLabel)
+    widgetNode(receiver, 'passwordField', JPasswordField)
+    widgetNode(receiver, 'textArea', JTextArea)
+    widgetNode(receiver, 'textField', JTextField)
+    widgetNode(receiver, 'formattedTextField', JFormattedTextField)
+    widgetNode(receiver, 'textPane', JTextPane)
+
+    containerNode(receiver, 'desktopPane', JDesktopPane)
+    containerNode(receiver, 'internalFrame', JInternalFrame)
+
+    widgetNode(receiver, 'colorChooser', JColorChooser)
+    widgetNode(receiver, 'comboBox', JComboBox)
+    widgetNode(receiver, 'list', JList)
+    widgetNode(receiver, 'progressBar', JProgressBar)
+    widgetNode(receiver, 'separator', JSeparator)
+    widgetNode(receiver, 'scrollBar', JScrollBar)
+    widgetNode(receiver, 'slider', JSlider)
+    widgetNode(receiver, 'spinner', JSpinner)
+    widgetNode(receiver, 'tree', JTree)
+
+    containerNode(receiver, 'menu', JMenu)
+    containerNode(receiver, 'menuBar', JMenuBar)
+    containerNode(receiver, 'popupMenu', JPopupMenu)
+
+    containerNode(receiver, 'panel', JPanel)
+    containerNode(receiver, 'scrollPane', JScrollPane)
+    containerNode(receiver, 'splitPane', JSplitPane)
+    containerNode(receiver, 'tabbedPane', JTabbedPane)
+    containerNode(receiver, 'toolBar', JToolBar)
+    containerNode(receiver, 'viewport', JViewport)
+    containerNode(receiver, 'layeredPane', JLayeredPane)
+
+    widgetNode(receiver, 'boundedRangeModel', DefaultBoundedRangeModel)
+    widgetNode(receiver, 'spinnerDateModel', SpinnerDateModel)
+    widgetNode(receiver, 'spinnerListModel', SpinnerListModel)
+    widgetNode(receiver, 'spinnerNumberModel', SpinnerNumberModel)
+
+    containerNode(receiver, 'table', JTable)
+    widgetNode(receiver, 'tableColumn', TableColumn)
+    widgetNode(receiver, 'tableModel', TableModel)
+    receiver.method name: 'propertyColumn', type: 'void'
+    receiver.method name: 'closureColumn', type: 'void'
+
+    widgetNode(receiver, 'borderLayout', BorderLayout, [hgap: 'int', vgap: 'int'])
+    widgetNode(receiver, 'cardLayout', CardLayout)
+    widgetNode(receiver, 'flowLayout', FlowLayout)
+    widgetNode(receiver, 'gridLayout', GridLayout, [rows: 'int', cols: 'int'])
+    widgetNode(receiver, 'overlayLayout', OverlayLayout)
+    widgetNode(receiver, 'springLayout', SpringLayout)
+    widgetNode(receiver, 'gridBagLayout', GridBagLayout)
+    builderNode(receiver, 'gridBagConstraints', GridBagConstraints)
+    builderNode(receiver, 'gbc', GridBagConstraints)
+
+    containerNode(receiver, 'box', Box)
+    widgetNode(receiver, 'boxLayout', BoxLayout)
+    containerNode(receiver, 'hbox', Box)
+    widgetNode(receiver, 'hglue', Component)
+    widgetNode(receiver, 'hstrut', Component)
+    containerNode(receiver, 'vbox', Box)
+    widgetNode(receiver, 'vglue', Component)
+    widgetNode(receiver, 'vstrut', Component)
+    widgetNode(receiver, 'glue', Component)
+    widgetNode(receiver, 'rigidArea', Component)
+
+    widgetNode(receiver, 'tableLayout', TableLayout)
+    widgetNode(receiver, 'tr', TableLayoutRow)
+    widgetNode(receiver, 'td', TableLayoutCell)
+
+    widgetNode(receiver, 'lineBorder', LineBorder)
+    widgetNode(receiver, 'loweredBevelBorder', BevelBorder)
+    widgetNode(receiver, 'raisedBevelBorder', BevelBorder)
+    widgetNode(receiver, 'etchedBorder', EtchedBorder)
+    widgetNode(receiver, 'loweredEtchedBorder', EtchedBorder)
+    widgetNode(receiver, 'raisedEtchedBorder', EtchedBorder)
+    widgetNode(receiver, 'titledBorder', TitledBorder)
+    widgetNode(receiver, 'emptyBorder', EmptyBorder)
+    widgetNode(receiver, 'compoundBorder', CompoundBorder)
+    widgetNode(receiver, 'matteBorder', MatteBorder)
 }
 
 ['Controller', 'View'].each { type ->
