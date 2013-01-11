@@ -16,6 +16,7 @@
 package griffon.swing;
 
 import griffon.application.StandaloneGriffonApplication;
+import griffon.core.GriffonApplication;
 import griffon.core.UIThreadManager;
 import griffon.util.GriffonExceptionHandler;
 import griffon.util.UIThreadHandler;
@@ -123,7 +124,7 @@ public abstract class AbstractSwingGriffonApplication extends AbstractGriffonApp
         ready();
     }
 
-    public static void run(Class applicationClass, String[] args) {
+    public static GriffonApplication run(Class applicationClass, String[] args) {
         GriffonExceptionHandler.registerExceptionHandler();
         StandaloneGriffonApplication app = null;
         try {
@@ -140,5 +141,6 @@ public abstract class AbstractSwingGriffonApplication extends AbstractGriffonApp
         } catch (NoSuchMethodException e) {
             sanitize(e).printStackTrace();
         }
+        return app;
     }
 }

@@ -15,6 +15,7 @@
  */
 package griffon.swing;
 
+import griffon.core.GriffonApplication;
 
 /**
  * Basic implementation of {@code GriffonApplication} that runs in standalone/webstart mode.
@@ -33,6 +34,14 @@ public class SwingApplication extends AbstractSwingGriffonApplication {
     }
 
     public static void main(String[] args) {
-        AbstractSwingGriffonApplication.run(SwingApplication.class, args);
+        run(args);
+    }
+
+    public static GriffonApplication run() {
+        return run(AbstractSwingGriffonApplication.EMPTY_ARGS);
+    }
+
+    public static GriffonApplication run(String[] args) {
+        return AbstractSwingGriffonApplication.run(SwingApplication.class, args);
     }
 }

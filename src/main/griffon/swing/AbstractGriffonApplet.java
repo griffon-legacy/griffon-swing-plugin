@@ -22,14 +22,17 @@ import griffon.core.i18n.MessageSource;
 import griffon.core.i18n.NoSuchMessageException;
 import griffon.core.resources.NoSuchResourceException;
 import griffon.core.resources.ResourceResolver;
+import griffon.exceptions.GriffonException;
 import griffon.util.ApplicationHolder;
 import griffon.util.ConfigUtils;
 import griffon.util.Metadata;
 import griffon.util.RunnableWithArgs;
+import griffon.util.ApplicationClassLoader;
 import groovy.lang.Binding;
 import groovy.lang.Closure;
 import groovy.util.ConfigObject;
 import groovy.util.FactoryBuilderSupport;
+import org.codehaus.griffon.runtime.util.ExecutorServiceHolder;
 import org.codehaus.griffon.runtime.core.NoopEventRouter;
 import org.codehaus.griffon.runtime.core.ResourceLocator;
 import org.codehaus.griffon.runtime.util.GriffonApplicationHelper;
@@ -245,19 +248,19 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
     }
 
     public Class getAppConfigClass() {
-        return loadClass(GriffonApplication.Configuration.APPLICATION.getName());
+        return loadConfigurationalClass(GriffonApplication.Configuration.APPLICATION.getName());
     }
 
     public Class getConfigClass() {
-        return loadClass(GriffonApplication.Configuration.CONFIG.getName());
+        return loadConfigurationalClass(GriffonApplication.Configuration.CONFIG.getName());
     }
 
     public Class getBuilderClass() {
-        return loadClass(GriffonApplication.Configuration.BUILDER.getName());
+        return loadConfigurationalClass(GriffonApplication.Configuration.BUILDER.getName());
     }
 
     public Class getEventsClass() {
-        return loadClass(GriffonApplication.Configuration.EVENTS.getName());
+        return loadConfigurationalClass(GriffonApplication.Configuration.EVENTS.getName());
     }
 
     public void initialize() {
@@ -349,6 +352,8 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         // stage 4 - call shutdown script
         log.debug("Shutdown stage 4: execute Shutdown script");
         GriffonApplicationHelper.runLifecycleHandler(GriffonApplication.Lifecycle.SHUTDOWN.getName(), this);
+
+        ExecutorServiceHolder.shutdownAll();
 
         return true;
     }
@@ -482,19 +487,19 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         UIThreadManager.getInstance().executeOutside(runnable);
     }
 
-    public Future execFuture(ExecutorService executorService, Closure closure) {
+    public <R> Future<R> execFuture(ExecutorService executorService, Closure<R> closure) {
         return UIThreadManager.getInstance().executeFuture(executorService, closure);
     }
 
-    public Future execFuture(Closure closure) {
+    public <R> Future<R> execFuture(Closure<R> closure) {
         return UIThreadManager.getInstance().executeFuture(closure);
     }
 
-    public Future execFuture(ExecutorService executorService, Callable callable) {
+    public <R> Future<R> execFuture(ExecutorService executorService, Callable<R> callable) {
         return UIThreadManager.getInstance().executeFuture(executorService, callable);
     }
 
-    public Future execFuture(Callable callable) {
+    public <R> Future<R> execFuture(Callable<R> callable) {
         return UIThreadManager.getInstance().executeFuture(callable);
     }
 
@@ -609,6 +614,22 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
             // ignored
         }
         return null;
+    }
+
+    private Class<?> loadConfigurationalClass(String className) {
+        if (!className.contains(".")) {
+            String fixedClassName = "config." + className;
+            try {
+                return ApplicationClassLoader.get().loadClass(fixedClassName);
+            } catch (ClassNotFoundException cnfe) {
+                if (cnfe.getMessage().equals(fixedClassName)) {
+                    return loadClass(className);
+                } else {
+                    throw new GriffonException(cnfe);
+                }
+            }
+        }
+        return loadClass(className);
     }
 
     public InputStream getResourceAsStream(String name) {
