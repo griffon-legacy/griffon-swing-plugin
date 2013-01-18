@@ -21,6 +21,7 @@ import griffon.core.resources.editors.AbstractPropertyEditor;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,9 +31,9 @@ import java.net.URL;
 
 /**
  * @author Andres Almiray
- * @since 1.1.0
+ * @since 1.3.0
  */
-public class ImagePropertyEditor extends AbstractPropertyEditor {
+public class BufferedImagePropertyEditor extends AbstractPropertyEditor {
     public void setAsText(String value) throws IllegalArgumentException {
         setValue(value);
     }
@@ -51,12 +52,10 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
             handleAsInputStream((InputStream) value);
         } else if (value instanceof ImageInputStream) {
             handleAsImageInputStream((ImageInputStream) value);
-        } else if (value instanceof byte[]) {
-            handleAsByteArray((byte[]) value);
-        } else if (value instanceof Image) {
+        } else if (value instanceof BufferedImage) {
             super.setValue(value);
         } else {
-            throw illegalValue(value, Image.class);
+            throw illegalValue(value, BufferedImage.class);
         }
     }
 
@@ -68,7 +67,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
         try {
             super.setValue(ImageIO.read(file));
         } catch (IOException e) {
-            throw illegalValue(file, Image.class);
+            throw illegalValue(file, BufferedImage.class);
         }
     }
 
@@ -76,7 +75,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
         try {
             super.setValue(ImageIO.read(url));
         } catch (IOException e) {
-            throw illegalValue(url, Image.class);
+            throw illegalValue(url, BufferedImage.class);
         }
     }
 
@@ -84,7 +83,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
         try {
             handleAsURL(uri.toURL());
         } catch (MalformedURLException e) {
-            throw illegalValue(uri, Image.class);
+            throw illegalValue(uri, BufferedImage.class);
         }
     }
 
@@ -92,7 +91,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
         try {
             super.setValue(ImageIO.read(stream));
         } catch (IOException e) {
-            throw illegalValue(stream, Image.class);
+            throw illegalValue(stream, BufferedImage.class);
         }
     }
 
@@ -100,11 +99,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
         try {
             super.setValue(ImageIO.read(stream));
         } catch (IOException e) {
-            throw illegalValue(stream, Image.class);
+            throw illegalValue(stream, BufferedImage.class);
         }
-    }
-
-    private void handleAsByteArray(byte[] bytes) {
-        super.setValue(Toolkit.getDefaultToolkit().createImage(bytes));
     }
 }

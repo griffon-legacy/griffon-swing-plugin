@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@
  * @author Andres Almiray
  */
 class SwingGriffonPlugin {
-    String version = '1.2.0'
-    String griffonVersion = '1.2.0 > *'
+    String version = '1.3.0'
+    String griffonVersion = '1.3.0 > *'
     Map dependsOn = [:]
     List pluginIncludes = []
     String license = 'Apache Software License 2.0'
@@ -77,16 +77,25 @@ This plugin contributes the following property editors
 | java.awt.Color               | #F00 ; red, green, blue, alpha ; Color constant     |
 | java.awt.Dimension           | width, height                                       |
 | java.awt.Font                | family-style-size                                   |
-| java.awt.GradientPaint       | x1, y1, #F00, x2, y2, #00F                          |
+| java.awt.GradientPaint       | x1, y1, #F00, x2, y2, #00F, CYCLIC                  |
 | java.awt.Image               | path/to/image_file                                  |
 | java.awt.Insets              | top, left, bottom, right                            |
 | java.awt.LinearGradientPaint | xy, y1, x2, x2, [0.0, 1.0], [#F00, #00F], REPEAT    |
 | java.awt.Point               | x, y                                                |
+| java.awt.Polygon             | x1, y1, x2, y2, ..., xn, yn
 | java.awt.RadialGradientPaint | xy, y1, r, fx, fy, [0.0, 1.0], [#F00, #00F], REPEAT |
 | java.awt.Rectangle           | x, y, width, height                                 |
 | java.awt.geom.Point2D        | x, y                                                |
 | java.awt.geom.Rectangle2D    | x, y , width, height                                |
 | javax.swing.Icon             | path/to/image_file                                  |
+
+Notes:
+
+ * CYCLIC may be `true` or `false`.
+ * REPEAT must be one of `MultipleGradientPaint.CycleMethod`.
+ * GradientPaint supports another format: x1, y1 | x2, y2, | #F00, #00F | CYCLIC
+ * Color supports all color constants defined by `griffon.swing.Colors`.
+ * All color formats are supported by the gradient editors.
 
 The following styles are supported by `FontPropertyEditor`
 

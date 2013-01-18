@@ -1,5 +1,5 @@
 /*
- * Copyright 2008-2012 the original author or authors.
+ * Copyright 2008-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -716,6 +716,10 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         return messageSource.getMessage(key, args, defaultMessage, locale);
     }
 
+    public Object resolveMessageValue(String key, Locale locale) throws NoSuchMessageException {
+        return messageSource.resolveMessageValue(key, locale);
+    }
+
     public ResourceResolver resolveResourceSource() {
         return resourceResolver;
     }
@@ -786,6 +790,10 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
 
     public Object resolveResource(String key, Map<String, Object> args, Object defaultValue, Locale locale) {
         return resourceResolver.resolveResource(key, args, defaultValue, locale);
+    }
+
+    public Object resolveResourceValue(String key, Locale locale) throws NoSuchResourceException {
+        return resourceResolver.resolveResourceValue(key, locale);
     }
 
     public GriffonControllerActionManager getActionManager() {

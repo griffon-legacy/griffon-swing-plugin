@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 the original author or authors.
+ * Copyright 2010-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package griffon.swing.editors;
 
 import griffon.core.resources.editors.AbstractPropertyEditor;
+import griffon.swing.Colors;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -146,11 +146,10 @@ public class ColorPropertyEditor extends AbstractPropertyEditor {
         } else {
             // assume it's a Color constant
             try {
-                Field colorField = Color.class.getDeclaredField(str.toUpperCase());
-                super.setValue(colorField.get(null));
-            } catch (NoSuchFieldException e) {
-                throw illegalValue(str, Color.class, e);
-            } catch (IllegalAccessException e) {
+                Colors colorConstant = Colors.valueOf(str.toUpperCase());
+                super.setValue(colorConstant.getColor());
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw illegalValue(str, Color.class, e);
             }
         }

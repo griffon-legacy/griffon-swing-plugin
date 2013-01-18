@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 the original author or authors.
+ * Copyright 2010-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,10 +155,10 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
     }
 
     private void handleAsMap(Map map) {
-        float x1 = (Float) getMapValue(map, "x1", 0);
-        float y1 = (Float) getMapValue(map, "y1", 0);
-        float x2 = (Float) getMapValue(map, "x2", 0);
-        float y2 = (Float) getMapValue(map, "y2", 0);
+        float x1 = (Float) getMapValue(map, "x1", 0f);
+        float y1 = (Float) getMapValue(map, "y1", 0f);
+        float x2 = (Float) getMapValue(map, "x2", 0f);
+        float y2 = (Float) getMapValue(map, "y2", 0f);
         MultipleGradientPaint.CycleMethod cyclicMethod = MultipleGradientPaint.CycleMethod.NO_CYCLE;
 
         float[] fractions = parseFractions(map, map.get("fractions"));
@@ -263,16 +263,8 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
 
     private float parse(String val) {
         try {
-            return Float.parseFloat(String.valueOf(val).trim());
+            return Float.parseFloat(val.trim());
         } catch (NumberFormatException e) {
-            throw illegalValue(val, LinearGradientPaint.class, e);
-        }
-    }
-
-    private boolean parseBoolean(String val) {
-        try {
-            return Boolean.parseBoolean(val.trim());
-        } catch (Exception e) {
             throw illegalValue(val, LinearGradientPaint.class, e);
         }
     }
@@ -286,8 +278,8 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
         throw illegalValue(value, LinearGradientPaint.class);
     }
 
-    private int parse(Number val) {
-        return val.intValue() & 0xFF;
+    private float parse(Number val) {
+        return val.floatValue();
     }
 
     private Object getMapValue(Map map, String key, Object defaultValue) {

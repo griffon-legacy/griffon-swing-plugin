@@ -1,5 +1,6 @@
 package griffon.swing.editors
 
+import griffon.swing.Colors
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,6 +47,8 @@ class ColorPropertyEditorSpec extends Specification {
         new Color(16, 32, 48, 64)  | [r: 16, g: 32, b: 48, a: 64]
         new Color(16, 32, 48, 64)  | ['10', '20', '30', '40']
         new Color(16, 32, 48, 64)  | [r: '10', g: '20', b: '30', a: '40']
+        Colors.FUCHSIA.color       | 'FUCHSIA'
+        Colors.FUCHSIA.color       | 'fuchsia'
     }
 
     void "Invalid color format '#format'"() {
