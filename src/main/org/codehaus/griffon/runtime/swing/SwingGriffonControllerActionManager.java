@@ -31,6 +31,6 @@ public class SwingGriffonControllerActionManager extends AbstractGriffonControll
 
     @Override
     protected GriffonControllerAction createControllerAction(GriffonController controller, String actionName) {
-        return new SwingGriffonControllerAction(controller, actionName);
+        return new SwingGriffonControllerAction(this, controller, actionName);
     }
 }

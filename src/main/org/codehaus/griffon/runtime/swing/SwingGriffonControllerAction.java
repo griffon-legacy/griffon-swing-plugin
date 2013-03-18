@@ -17,12 +17,14 @@ package org.codehaus.griffon.runtime.swing;
 
 import griffon.core.GriffonController;
 import griffon.core.UIThreadManager;
+import griffon.core.controller.GriffonControllerActionManager;
 import griffon.swing.SwingAction;
 import griffon.util.RunnableWithArgs;
 import org.codehaus.griffon.runtime.core.controller.AbstractGriffonControllerAction;
-import org.codehaus.groovy.runtime.InvokerHelper;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.KeyStroke;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -36,12 +38,12 @@ import static griffon.util.GriffonNameUtils.isBlank;
 public class SwingGriffonControllerAction extends AbstractGriffonControllerAction {
     private final SwingAction toolkitAction;
 
-    public SwingGriffonControllerAction(GriffonController controller, final String actionName) {
-        super(controller, actionName);
+    public SwingGriffonControllerAction(final GriffonControllerActionManager actionManager, final GriffonController controller, final String actionName) {
+        super(actionManager, controller, actionName);
         final SwingGriffonControllerAction self = this;
         toolkitAction = new SwingAction(new RunnableWithArgs() {
             public void run(Object[] args) {
-                InvokerHelper.invokeMethod(self.getController(), actionName, args);
+                actionManager.invokeAction(self.getController(), actionName, args);
             }
         });
         addPropertyChangeListener(new PropertyChangeListener() {
