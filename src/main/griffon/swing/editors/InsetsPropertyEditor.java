@@ -34,13 +34,10 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
         return i.top + ", " + i.left + ", " + i.bottom + ", " + i.right;
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
@@ -49,7 +46,7 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Number) {
             handleAsNumber((Number) value);
         } else if (value instanceof Insets) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Insets.class);
         }
@@ -70,7 +67,7 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
                 l = parseValue(parts[1]);
             case 1:
                 t = parseValue(parts[0]);
-                super.setValue(new Insets(t, l, r, b));
+                super.setValueInternal(new Insets(t, l, r, b));
                 break;
             default:
                 throw illegalValue(str, Insets.class);
@@ -91,7 +88,7 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
                 l = parseValue(list.get(1));
             case 1:
                 t = parseValue(list.get(0));
-                super.setValue(new Insets(t, l, r, b));
+                super.setValueInternal(new Insets(t, l, r, b));
                 break;
             default:
                 throw illegalValue(list, Insets.class);
@@ -103,7 +100,7 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
         int l = getMapValue(map, "left", 0);
         int r = getMapValue(map, "right", 0);
         int b = getMapValue(map, "bottom", 0);
-        super.setValue(new Insets(t, l, r, b));
+        super.setValueInternal(new Insets(t, l, r, b));
     }
 
     private int parseValue(Object value) {
@@ -142,6 +139,6 @@ public class InsetsPropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsNumber(Number value) {
         int c = parse(value);
-        super.setValue(new Insets(c, c, c, c));
+        super.setValueInternal(new Insets(c, c, c, c));
     }
 }

@@ -67,6 +67,8 @@ public class ColorFormatter extends AbstractFormatter {
             delegate = new LongColorFormatterDelegate();
         } else if (PATTERN_LONG_WITH_ALPHA.equals(pattern)) {
             delegate = new LongWithAlphaColorFormatterDelegate();
+        } else if (isBlank(pattern)) {
+            delegate = new LongColorFormatterDelegate();
         } else {
             throw new IllegalArgumentException("Invalid pattern '" + pattern + "'. Valid patterns are " + Arrays.toString(PATTERNS));
         }
@@ -189,7 +191,8 @@ public class ColorFormatter extends AbstractFormatter {
         }
 
         public Color parse(String str) throws ParseException {
-            if (isBlank(str) || !str.startsWith("#") || str.length() != 5) {
+            if (isBlank(str)) return null;
+            if (!str.startsWith("#") || str.length() != 5) {
                 throw parseError(str, Color.class);
             }
 
@@ -232,7 +235,8 @@ public class ColorFormatter extends AbstractFormatter {
         }
 
         public Color parse(String str) throws ParseException {
-            if (isBlank(str) || !str.startsWith("#") || str.length() != 7) {
+            if (isBlank(str)) return null;
+            if (!str.startsWith("#") || str.length() != 7) {
                 throw parseError(str, Color.class);
             }
 
@@ -272,7 +276,8 @@ public class ColorFormatter extends AbstractFormatter {
         }
 
         public Color parse(String str) throws ParseException {
-            if (isBlank(str) || !str.startsWith("#") || str.length() != 9) {
+            if (isBlank(str)) return null;
+            if (!str.startsWith("#") || str.length() != 9) {
                 throw parseError(str, Color.class);
             }
 

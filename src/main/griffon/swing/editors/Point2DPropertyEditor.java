@@ -33,13 +33,10 @@ public class Point2DPropertyEditor extends AbstractPropertyEditor {
         return p.getX() + ", " + p.getY();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
@@ -48,7 +45,7 @@ public class Point2DPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Number) {
             handleAsNumber((Number) value);
         } else if (value instanceof Point2D) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Point2D.class);
         }
@@ -59,12 +56,12 @@ public class Point2DPropertyEditor extends AbstractPropertyEditor {
         switch (parts.length) {
             case 1:
                 double s = parseValue(parts[0]);
-                super.setValue(new Point2D.Double(s, s));
+                super.setValueInternal(new Point2D.Double(s, s));
                 break;
             case 2:
                 double x = parseValue(parts[0]);
                 double y = parseValue(parts[1]);
-                super.setValue(new Point2D.Double(x, y));
+                super.setValueInternal(new Point2D.Double(x, y));
                 break;
             default:
                 throw illegalValue(str, Point2D.class);
@@ -75,12 +72,12 @@ public class Point2DPropertyEditor extends AbstractPropertyEditor {
         switch (list.size()) {
             case 1:
                 double s = parseValue(list.get(0));
-                super.setValue(new Point2D.Double(s, s));
+                super.setValueInternal(new Point2D.Double(s, s));
                 break;
             case 2:
                 double x = parseValue(list.get(0));
                 double y = parseValue(list.get(1));
-                super.setValue(new Point2D.Double(x, y));
+                super.setValueInternal(new Point2D.Double(x, y));
                 break;
             default:
                 throw illegalValue(list, Point2D.class);
@@ -90,7 +87,7 @@ public class Point2DPropertyEditor extends AbstractPropertyEditor {
     private void handleAsMap(Map map) {
         double x = getMapValue(map, "x", 0);
         double y = getMapValue(map, "y", 0);
-        super.setValue(new Point2D.Double(x, y));
+        super.setValueInternal(new Point2D.Double(x, y));
     }
 
     private double parseValue(Object value) {
@@ -128,6 +125,6 @@ public class Point2DPropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsNumber(Number value) {
         double s = parse(value);
-        super.setValue(new Point2D.Double(s, s));
+        super.setValueInternal(new Point2D.Double(s, s));
     }
 }

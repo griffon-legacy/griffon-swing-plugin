@@ -34,20 +34,17 @@ public class RectanglePropertyEditor extends AbstractPropertyEditor {
         return r.getX() + ", " + r.getY() + ", " + r.getWidth() + ", " + r.getHeight();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
         } else if (value instanceof Map) {
             handleAsMap((Map) value);
         } else if (value instanceof Rectangle) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Rectangle.class);
         }
@@ -61,7 +58,7 @@ public class RectanglePropertyEditor extends AbstractPropertyEditor {
                 int y = parseValue(parts[1]);
                 int w = parseValue(parts[2]);
                 int h = parseValue(parts[3]);
-                super.setValue(new Rectangle(x, y, w, h));
+                super.setValueInternal(new Rectangle(x, y, w, h));
                 break;
             default:
                 throw illegalValue(str, Rectangle.class);
@@ -75,7 +72,7 @@ public class RectanglePropertyEditor extends AbstractPropertyEditor {
                 int y = parseValue(list.get(1));
                 int w = parseValue(list.get(2));
                 int h = parseValue(list.get(3));
-                super.setValue(new Rectangle(x, y, w, h));
+                super.setValueInternal(new Rectangle(x, y, w, h));
                 break;
             default:
                 throw illegalValue(list, Rectangle.class);
@@ -87,7 +84,7 @@ public class RectanglePropertyEditor extends AbstractPropertyEditor {
         int y = getMapValue(map, "y", 0);
         int w = getMapValue(map, "width", 0);
         int h = getMapValue(map, "height", 0);
-        super.setValue(new Rectangle(x, y, w, h));
+        super.setValueInternal(new Rectangle(x, y, w, h));
     }
 
     private int parseValue(Object value) {

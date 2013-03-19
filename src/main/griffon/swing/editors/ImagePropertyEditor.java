@@ -33,13 +33,10 @@ import java.net.URL;
  * @since 1.1.0
  */
 public class ImagePropertyEditor extends AbstractPropertyEditor {
-    public void setAsText(String value) throws IllegalArgumentException {
-        setValue(value);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof File) {
             handleAsFile((File) value);
@@ -54,7 +51,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof byte[]) {
             handleAsByteArray((byte[]) value);
         } else if (value instanceof Image) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Image.class);
         }
@@ -66,7 +63,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsFile(File file) {
         try {
-            super.setValue(ImageIO.read(file));
+            super.setValueInternal(ImageIO.read(file));
         } catch (IOException e) {
             throw illegalValue(file, Image.class);
         }
@@ -74,7 +71,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsURL(URL url) {
         try {
-            super.setValue(ImageIO.read(url));
+            super.setValueInternal(ImageIO.read(url));
         } catch (IOException e) {
             throw illegalValue(url, Image.class);
         }
@@ -90,7 +87,7 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsInputStream(InputStream stream) {
         try {
-            super.setValue(ImageIO.read(stream));
+            super.setValueInternal(ImageIO.read(stream));
         } catch (IOException e) {
             throw illegalValue(stream, Image.class);
         }
@@ -98,13 +95,13 @@ public class ImagePropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsImageInputStream(ImageInputStream stream) {
         try {
-            super.setValue(ImageIO.read(stream));
+            super.setValueInternal(ImageIO.read(stream));
         } catch (IOException e) {
             throw illegalValue(stream, Image.class);
         }
     }
 
     private void handleAsByteArray(byte[] bytes) {
-        super.setValue(Toolkit.getDefaultToolkit().createImage(bytes));
+        super.setValueInternal(Toolkit.getDefaultToolkit().createImage(bytes));
     }
 }

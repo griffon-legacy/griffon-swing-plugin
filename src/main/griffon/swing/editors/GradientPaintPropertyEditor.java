@@ -48,20 +48,17 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
             .toString();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
         } else if (value instanceof Map) {
             handleAsMap((Map) value);
         } else if (value instanceof GradientPaint) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, GradientPaint.class);
         }
@@ -113,7 +110,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
                     } catch (Exception e) {
                         throw illegalValue(colors[1], GradientPaint.class);
                     }
-                    super.setValue(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
+                    super.setValueInternal(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
                     break;
                 default:
                     throw illegalValue(str, GradientPaint.class);
@@ -141,7 +138,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
                     } catch (Exception e) {
                         throw illegalValue(parts[5], GradientPaint.class);
                     }
-                    super.setValue(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
+                    super.setValueInternal(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
                     break;
                 default:
                     throw illegalValue(str, GradientPaint.class);
@@ -168,18 +165,18 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
                 x2 = parseValue(list.get(3));
                 y2 = parseValue(list.get(4));
                 try {
-                    colorEditor.setValue(list.get(2));
+                    colorEditor.setValueInternal(list.get(2));
                     c1 = (Color) colorEditor.getValue();
                 } catch (Exception e) {
                     throw illegalValue(list.get(2), GradientPaint.class);
                 }
                 try {
-                    colorEditor.setValue(list.get(5));
+                    colorEditor.setValueInternal(list.get(5));
                     c2 = (Color) colorEditor.getValue();
                 } catch (Exception e) {
                     throw illegalValue(list.get(5), GradientPaint.class);
                 }
-                super.setValue(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
+                super.setValueInternal(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
                 break;
             default:
                 throw illegalValue(list, GradientPaint.class);
@@ -199,7 +196,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
         Object colorValue = map.get("c1");
         try {
             if (null != colorValue) {
-                colorEditor.setValue(colorValue);
+                colorEditor.setValueInternal(colorValue);
                 c1 = (Color) colorEditor.getValue();
             } else {
                 c1 = Color.WHITE;
@@ -210,7 +207,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
         colorValue = map.get("c2");
         try {
             if (null != colorValue) {
-                colorEditor.setValue(colorValue);
+                colorEditor.setValueInternal(colorValue);
                 c2 = (Color) colorEditor.getValue();
             } else {
                 c2 = Color.BLACK;
@@ -223,7 +220,7 @@ public class GradientPaintPropertyEditor extends AbstractPropertyEditor {
             cyclic = parseBoolean(String.valueOf(cyclicValue));
         }
 
-        super.setValue(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
+        super.setValueInternal(new GradientPaint(x1, y1, c1, x2, y2, c2, cyclic));
     }
 
     private float parse(String val) {

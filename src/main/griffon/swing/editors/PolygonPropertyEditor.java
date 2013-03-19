@@ -41,18 +41,15 @@ public class PolygonPropertyEditor extends AbstractPropertyEditor {
         return b.toString();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
         } else if (value instanceof Polygon) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Polygon.class);
         }
@@ -72,7 +69,7 @@ public class PolygonPropertyEditor extends AbstractPropertyEditor {
             xpoints[i] = parse(parts[2 * i]);
             ypoints[i] = parse(parts[(2 * i) + 1]);
         }
-        super.setValue(new Polygon(xpoints, ypoints, npoints));
+        super.setValueInternal(new Polygon(xpoints, ypoints, npoints));
     }
 
     private void handleAsList(List list) {
@@ -88,7 +85,7 @@ public class PolygonPropertyEditor extends AbstractPropertyEditor {
             xpoints[i] = parseValue(list.get(2 * i));
             ypoints[i] = parseValue(list.get((2 * i) + 1));
         }
-        super.setValue(new Polygon(xpoints, ypoints, npoints));
+        super.setValueInternal(new Polygon(xpoints, ypoints, npoints));
     }
 
     private int parseValue(Object value) {

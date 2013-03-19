@@ -43,20 +43,17 @@ public class FontPropertyEditor extends AbstractPropertyEditor {
         return "PLAIN";
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
         } else if (value instanceof Map) {
             handleAsMap((Map) value);
         } else if (value instanceof Font) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Font.class);
         }
@@ -72,7 +69,7 @@ public class FontPropertyEditor extends AbstractPropertyEditor {
         int style = resolveStyle(str, parts[1]);
         int size = parseSize(str, parts[2]);
 
-        super.setValue(new Font(family, style, size));
+        super.setValueInternal(new Font(family, style, size));
     }
 
     private void handleAsList(List list) {
@@ -84,14 +81,14 @@ public class FontPropertyEditor extends AbstractPropertyEditor {
         int style = resolveStyle(list, String.valueOf(list.get(1)));
         int size = parseSize(list, String.valueOf(list.get(2)));
 
-        super.setValue(new Font(family, style, size));
+        super.setValueInternal(new Font(family, style, size));
     }
 
     private void handleAsMap(Map map) {
         String family = getMapValue(map, "family", "");
         String style = getMapValue(map, "style", "");
         String size = getMapValue(map, "size", "");
-        super.setValue(new Font(family, resolveStyle(map, style), parseSize(map, size)));
+        super.setValueInternal(new Font(family, resolveStyle(map, style), parseSize(map, size)));
     }
 
     private String getMapValue(Map map, String key, String defaultValue) {

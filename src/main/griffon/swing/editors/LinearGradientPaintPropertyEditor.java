@@ -78,20 +78,17 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
         return b.append("]").toString();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
         } else if (value instanceof Map) {
             handleAsMap((Map) value);
         } else if (value instanceof LinearGradientPaint) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, LinearGradientPaint.class);
         }
@@ -119,7 +116,7 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
                 if (fractions.length != colors.length) {
                     throw illegalValue(str, LinearGradientPaint.class);
                 }
-                super.setValue(new LinearGradientPaint(x1, y1, x2, y2, fractions, colors, cyclicMethod));
+                super.setValueInternal(new LinearGradientPaint(x1, y1, x2, y2, fractions, colors, cyclicMethod));
                 break;
             default:
                 throw illegalValue(str, LinearGradientPaint.class);
@@ -147,7 +144,7 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
                 if (fractions.length != colors.length) {
                     throw illegalValue(list, LinearGradientPaint.class);
                 }
-                super.setValue(new LinearGradientPaint(x1, y1, x2, y2, fractions, colors, cyclicMethod));
+                super.setValueInternal(new LinearGradientPaint(x1, y1, x2, y2, fractions, colors, cyclicMethod));
                 break;
             default:
                 throw illegalValue(list, LinearGradientPaint.class);
@@ -171,7 +168,7 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
             cyclicMethod = parseCyclicMethod(map, String.valueOf(cyclicValue));
         }
 
-        super.setValue(new LinearGradientPaint(x1, y1, x2, y2, fractions, colors, cyclicMethod));
+        super.setValueInternal(new LinearGradientPaint(x1, y1, x2, y2, fractions, colors, cyclicMethod));
     }
 
     private float[] parseFractions(Object source, Object obj) {
@@ -225,7 +222,7 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
         ColorPropertyEditor colorEditor = new ColorPropertyEditor();
         for (int i = 0; i < strs.length; i++) {
             try {
-                colorEditor.setValue(strs[i]);
+                colorEditor.setValueInternal(strs[i]);
                 colors[i] = (Color) colorEditor.getValue();
             } catch (Exception e) {
                 throw illegalValue(strs[i], LinearGradientPaint.class);
@@ -240,7 +237,7 @@ public class LinearGradientPaintPropertyEditor extends AbstractPropertyEditor {
         ColorPropertyEditor colorEditor = new ColorPropertyEditor();
         for (int i = 0; i < list.size(); i++) {
             try {
-                colorEditor.setValue(list.get(i));
+                colorEditor.setValueInternal(list.get(i));
                 colors[i] = (Color) colorEditor.getValue();
             } catch (Exception e) {
                 throw illegalValue(list.get(i), LinearGradientPaint.class);

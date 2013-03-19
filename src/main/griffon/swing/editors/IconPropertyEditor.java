@@ -34,13 +34,10 @@ import java.net.URL;
  * @since 1.1.0
  */
 public class IconPropertyEditor extends AbstractPropertyEditor {
-    public void setAsText(String value) throws IllegalArgumentException {
-        setValue(value);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof File) {
             handleAsFile((File) value);
@@ -57,7 +54,7 @@ public class IconPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Image) {
             handleAsImage((Image) value);
         } else if (value instanceof Icon) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Icon.class);
         }
@@ -108,10 +105,10 @@ public class IconPropertyEditor extends AbstractPropertyEditor {
     }
 
     private void handleAsByteArray(byte[] bytes) {
-        super.setValue(new ImageIcon(bytes));
+        super.setValueInternal(new ImageIcon(bytes));
     }
 
     private void handleAsImage(Image img) {
-        super.setValue(new ImageIcon(img));
+        super.setValueInternal(new ImageIcon(img));
     }
 }

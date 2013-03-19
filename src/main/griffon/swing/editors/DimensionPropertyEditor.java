@@ -34,13 +34,10 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         return dimension.getWidth() + ", " + dimension.getHeight();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
@@ -49,7 +46,7 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Number) {
             handleAsNumber((Number) value);
         } else if (value instanceof Dimension) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Dimension.class);
         }
@@ -60,12 +57,12 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         switch (parts.length) {
             case 1:
                 int s = parseValue(parts[0]);
-                super.setValue(new Dimension(s, s));
+                super.setValueInternal(new Dimension(s, s));
                 break;
             case 2:
                 int w = parseValue(parts[0]);
                 int h = parseValue(parts[1]);
-                super.setValue(new Dimension(w, h));
+                super.setValueInternal(new Dimension(w, h));
                 break;
             default:
                 throw illegalValue(str, Dimension.class);
@@ -76,12 +73,12 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
         switch (list.size()) {
             case 1:
                 int s = parseValue(list.get(0));
-                super.setValue(new Dimension(s, s));
+                super.setValueInternal(new Dimension(s, s));
                 break;
             case 2:
                 int w = parseValue(list.get(0));
                 int h = parseValue(list.get(1));
-                super.setValue(new Dimension(w, h));
+                super.setValueInternal(new Dimension(w, h));
                 break;
             default:
                 throw illegalValue(list, Dimension.class);
@@ -91,7 +88,7 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
     private void handleAsMap(Map map) {
         int w = getMapValue(map, "width", 0);
         int h = getMapValue(map, "height", 0);
-        super.setValue(new Dimension(w, h));
+        super.setValueInternal(new Dimension(w, h));
     }
 
     private int parseValue(Object value) {
@@ -130,6 +127,6 @@ public class DimensionPropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsNumber(Number value) {
         int s = parse(value);
-        super.setValue(new Dimension(s, s));
+        super.setValueInternal(new Dimension(s, s));
     }
 }

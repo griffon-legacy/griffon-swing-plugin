@@ -34,13 +34,10 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
         return p.getX() + ", " + p.getY();
     }
 
-    public void setAsText(String text) throws IllegalArgumentException {
-        setValue(text);
-    }
-
-    public void setValue(Object value) {
-        if (null == value) return;
-        if (value instanceof CharSequence) {
+    protected void setValueInternal(Object value) {
+        if (null == value) {
+            super.setValueInternal(null);
+        } else if (value instanceof CharSequence) {
             handleAsString(String.valueOf(value));
         } else if (value instanceof List) {
             handleAsList((List) value);
@@ -49,7 +46,7 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
         } else if (value instanceof Number) {
             handleAsNumber((Number) value);
         } else if (value instanceof Point) {
-            super.setValue(value);
+            super.setValueInternal(value);
         } else {
             throw illegalValue(value, Point.class);
         }
@@ -60,12 +57,12 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
         switch (parts.length) {
             case 1:
                 int s = parseValue(parts[0]);
-                super.setValue(new Point(s, s));
+                super.setValueInternal(new Point(s, s));
                 break;
             case 2:
                 int x = parseValue(parts[0]);
                 int y = parseValue(parts[1]);
-                super.setValue(new Point(x, y));
+                super.setValueInternal(new Point(x, y));
                 break;
             default:
                 throw illegalValue(str, Point.class);
@@ -76,12 +73,12 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
         switch (list.size()) {
             case 1:
                 int s = parseValue(list.get(0));
-                super.setValue(new Point(s, s));
+                super.setValueInternal(new Point(s, s));
                 break;
             case 2:
                 int x = parseValue(list.get(0));
                 int y = parseValue(list.get(1));
-                super.setValue(new Point(x, y));
+                super.setValueInternal(new Point(x, y));
                 break;
             default:
                 throw illegalValue(list, Point.class);
@@ -91,7 +88,7 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
     private void handleAsMap(Map map) {
         int x = getMapValue(map, "x", 0);
         int y = getMapValue(map, "y", 0);
-        super.setValue(new Point(x, y));
+        super.setValueInternal(new Point(x, y));
     }
 
     private int parseValue(Object value) {
@@ -129,6 +126,6 @@ public class PointPropertyEditor extends AbstractPropertyEditor {
 
     private void handleAsNumber(Number value) {
         int s = parse(value);
-        super.setValue(new Point(s, s));
+        super.setValueInternal(new Point(s, s));
     }
 }
