@@ -71,12 +71,12 @@ public class SwingGriffonControllerAction extends AbstractGriffonControllerActio
                                 toolkitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(accelerator));
                             }
                         } else if (KEY_SMALL_ICON.equals(evt.getPropertyName())) {
-                            final String smallIcon = (String) evt.getNewValue();
+                            String smallIcon = (String) evt.getNewValue();
                             if (!isBlank(smallIcon)) {
                                 toolkitAction.putValue(Action.SMALL_ICON, new ImageIcon(smallIcon));
                             }
                         } else if (KEY_LARGE_ICON.equals(evt.getPropertyName())) {
-                            final String largeIcon = (String) evt.getNewValue();
+                            String largeIcon = (String) evt.getNewValue();
                             if (!isBlank(largeIcon)) {
                                 toolkitAction.putValue(Action.LARGE_ICON_KEY, new ImageIcon(largeIcon));
                             }
@@ -85,6 +85,30 @@ public class SwingGriffonControllerAction extends AbstractGriffonControllerActio
                 });
             }
         });
+    }
+
+    protected void doInitialize() {
+        toolkitAction.putValue(Action.NAME, getName());
+        toolkitAction.putValue(Action.SHORT_DESCRIPTION, getShortDescription());
+        toolkitAction.putValue(Action.LONG_DESCRIPTION, getLongDescription());
+        toolkitAction.setEnabled(isEnabled());
+        toolkitAction.putValue(Action.SELECTED_KEY, isSelected());
+        String mnemonic = getMnemonic();
+        if (!isBlank(mnemonic)) {
+            toolkitAction.putValue(Action.MNEMONIC_KEY, KeyStroke.getKeyStroke(mnemonic).getKeyCode());
+        }
+        String accelerator = getAccelerator();
+        if (!isBlank(accelerator)) {
+            toolkitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(accelerator));
+        }
+        String smallIcon = getSmallIcon();
+        if (!isBlank(smallIcon)) {
+            toolkitAction.putValue(Action.SMALL_ICON, new ImageIcon(smallIcon));
+        }
+        String largeIcon = getLargeIcon();
+        if (!isBlank(largeIcon)) {
+            toolkitAction.putValue(Action.LARGE_ICON_KEY, new ImageIcon(largeIcon));
+        }
     }
 
     public Object getToolkitAction() {
