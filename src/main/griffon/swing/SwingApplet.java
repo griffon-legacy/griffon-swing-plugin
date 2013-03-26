@@ -68,7 +68,7 @@ public class SwingApplet extends AbstractGriffonApplet implements SwingGriffonAp
     public Object createApplicationContainer() {
         if (appletContainerDispensed) {
             Window window = SwingUtils.createApplicationFrame(this);
-            windowManager.attach(window);
+            // windowManager.attach(window);
             return window;
         } else {
             appletContainerDispensed = true;

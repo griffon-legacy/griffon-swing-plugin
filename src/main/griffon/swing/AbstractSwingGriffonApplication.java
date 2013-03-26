@@ -97,7 +97,7 @@ public abstract class AbstractSwingGriffonApplication extends AbstractGriffonApp
 
     public Object createApplicationContainer() {
         Window window = SwingUtils.createApplicationFrame(this);
-        windowManager.attach(window);
+        // windowManager.attach(window);
         return window;
     }
 
