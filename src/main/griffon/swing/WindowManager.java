@@ -384,6 +384,33 @@ public final class WindowManager implements ShutdownHandler {
     }
 
     /**
+     * Counts how many Windows are visible regardless of their attached status to this WindowManager.
+     *
+     * @return the number of visible Windows
+     * @since 1.3.0
+     */
+    public int countVisibleWindows() {
+        int visibleWindows = 0;
+        for (Window window : windows) {
+            if (window.isVisible()) {
+                visibleWindows++;
+            }
+        }
+        return visibleWindows;
+    }
+
+    /**
+     * Returns the value of the "application.autoShutdown" configuration flag.
+     *
+     * @return the value of the "application.autoShutdown" configuration flag.
+     * @since 1.3.0
+     */
+    public boolean isAutoShutdown() {
+        Boolean autoShutdown = (Boolean) app.getConfig().flatten().get("application.autoShutdown");
+        return autoShutdown == null || autoShutdown;
+    }
+
+    /**
      * WindowAdapter that optionally invokes hide() when the window is about to be closed.
      *
      * @author Andres Almiray
@@ -391,17 +418,11 @@ public final class WindowManager implements ShutdownHandler {
     private class WindowHelper extends WindowAdapter {
         public void windowClosing(WindowEvent event) {
             if (app.getPhase() == ApplicationPhase.SHUTDOWN) return;
-            int visibleWindows = 0;
-            for (Window window : windows) {
-                if (window.isVisible()) {
-                    visibleWindows++;
-                }
-            }
+            int visibleWindows = countVisibleWindows();
 
-            if (isHideBeforeHandler() || visibleWindows > 1) hide(event.getWindow());
+            if (isHideBeforeHandler() || visibleWindows > 0) hide(event.getWindow());
 
-            Boolean autoShutdown = (Boolean) app.getConfig().flatten().get("application.autoShutdown");
-            if (visibleWindows <= 1 && autoShutdown != null && autoShutdown) {
+            if (visibleWindows <= 1 && isAutoShutdown()) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Attempting to shutdown application");
                 }

@@ -33,7 +33,7 @@ public class DefaultWindowDisplayHandler implements WindowDisplayHandler {
     }
 
     public void hide(Window window, GriffonApplication application) {
-        if (window != null) window.dispose();
+        if (window != null) window.setVisible(false);
     }
 
     public void show(JInternalFrame window, GriffonApplication application) {
@@ -41,6 +41,6 @@ public class DefaultWindowDisplayHandler implements WindowDisplayHandler {
     }
 
     public void hide(JInternalFrame window, GriffonApplication application) {
-        if (window != null) window.dispose();
+        if (window != null) window.setVisible(false);
     }
 }

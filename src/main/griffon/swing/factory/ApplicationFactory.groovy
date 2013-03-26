@@ -52,6 +52,11 @@ class ApplicationFactory extends AbstractFactory {
 
     public Object newInstance(FactoryBuilderSupport builder, Object name, Object value, Map attributes) {
         def application = builder.app.createApplicationContainer()
+        if (application instanceof Window) {
+            if (attributes.id) application.name = attributes.id
+            if (attributes.name) application.name = attributes.name
+            builder.app.windowManager.attach(application)
+        }
         def window = getContainingWindow(application)
 
         if (application instanceof JApplet && swingXPresent) {
