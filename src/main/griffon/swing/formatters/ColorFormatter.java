@@ -24,6 +24,8 @@ import java.awt.Color;
 import java.util.Arrays;
 
 import static griffon.util.GriffonNameUtils.isBlank;
+import static java.lang.Integer.toHexString;
+import static org.codehaus.groovy.runtime.StringGroovyMethods.padLeft;
 
 /**
  * @author Andres Almiray
@@ -144,9 +146,9 @@ public class ColorFormatter extends AbstractFormatter {
             }
 
             return new StringBuilder("#")
-                .append(Integer.toHexString(color.getRed()).charAt(0))
-                .append(Integer.toHexString(color.getGreen()).charAt(0))
-                .append(Integer.toHexString(color.getBlue()).charAt(0))
+                .append(toHexString(color.getRed()).charAt(0))
+                .append(toHexString(color.getGreen()).charAt(0))
+                .append(toHexString(color.getBlue()).charAt(0))
                 .toString();
         }
 
@@ -183,10 +185,10 @@ public class ColorFormatter extends AbstractFormatter {
             }
 
             return new StringBuilder("#")
-                .append(Integer.toHexString(color.getRed()).charAt(0))
-                .append(Integer.toHexString(color.getGreen()).charAt(0))
-                .append(Integer.toHexString(color.getBlue()).charAt(0))
-                .append(Integer.toHexString(color.getAlpha()).charAt(0))
+                .append(toHexString(color.getRed()).charAt(0))
+                .append(toHexString(color.getGreen()).charAt(0))
+                .append(toHexString(color.getBlue()).charAt(0))
+                .append(toHexString(color.getAlpha()).charAt(0))
                 .toString();
         }
 
@@ -228,9 +230,9 @@ public class ColorFormatter extends AbstractFormatter {
             }
 
             return new StringBuilder("#")
-                .append(Integer.toHexString(color.getRed()))
-                .append(Integer.toHexString(color.getGreen()))
-                .append(Integer.toHexString(color.getBlue()))
+                .append(padLeft(toHexString(color.getRed()), 2, "0"))
+                .append(padLeft(toHexString(color.getGreen()), 2, "0"))
+                .append(padLeft(toHexString(color.getBlue()), 2, "0"))
                 .toString();
         }
 
@@ -268,10 +270,10 @@ public class ColorFormatter extends AbstractFormatter {
             }
 
             return new StringBuilder("#")
-                .append(Integer.toHexString(color.getRed()))
-                .append(Integer.toHexString(color.getGreen()))
-                .append(Integer.toHexString(color.getBlue()))
-                .append(Integer.toHexString(color.getAlpha()))
+                .append(padLeft(toHexString(color.getRed()), 2, "0"))
+                .append(padLeft(toHexString(color.getGreen()), 2, "0"))
+                .append(padLeft(toHexString(color.getBlue()), 2, "0"))
+                .append(padLeft(toHexString(color.getAlpha()), 2, "0"))
                 .toString();
         }
 
