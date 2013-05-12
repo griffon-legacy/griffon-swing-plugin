@@ -18,7 +18,10 @@ package griffon.swing;
 import griffon.core.GriffonApplication;
 import griffon.util.ConfigUtils;
 
-import javax.swing.*;
+import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.WindowConstants;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -54,8 +57,8 @@ public class SwingUtils {
         int y = (int) (center.y - (h / 2));
 
         Point corner = new Point(
-                (x >= 0 ? x : 0),
-                (y >= 0 ? y : 0)
+            (x >= 0 ? x : 0),
+            (y >= 0 ? y : 0)
         );
 
         window.setLocation(corner);
@@ -72,7 +75,7 @@ public class SwingUtils {
         if (internalFrame == null) return;
 
         JDesktopPane desktop = internalFrame.getDesktopPane();
-        if(desktop == null) return;
+        if (desktop == null) return;
         Dimension screen = desktop.getSize();
         Point center = new Point(screen.width / 2, screen.height / 2);
 
@@ -82,8 +85,8 @@ public class SwingUtils {
         int y = (int) (center.y - (h / 2));
 
         Point corner = new Point(
-                (x >= 0 ? x : 0),
-                (y >= 0 ? y : 0)
+            (x >= 0 ? x : 0),
+            (y >= 0 ? y : 0)
         );
 
         internalFrame.setLocation(corner);
@@ -199,18 +202,20 @@ public class SwingUtils {
      * @return the component reference if found, null otherwise
      */
     public static Component findComponentByName(String name, Container root) {
-        if (root == null || isBlank(root.getName())) return root;
-        Component component = null;
+        if (root == null || isBlank(name) || name.equals(root.getName())) return root;
+
         for (Component comp : root.getComponents()) {
+            if (name.equals(comp.getName())) {
+                return comp;
+            }
             if (comp instanceof Container) {
                 Component found = findComponentByName(name, (Container) comp);
                 if (found != null) {
-                    component = found;
-                    break;
+                    return found;
                 }
             }
         }
-        return component;
+        return null;
     }
 
     /**
@@ -238,13 +243,13 @@ public class SwingUtils {
 
         if (gc.getColorModel().hasAlpha()) {
             image = gc.createCompatibleImage(
-                    (int) component.getSize().getWidth(),
-                    (int) component.getSize().getHeight());
+                (int) component.getSize().getWidth(),
+                (int) component.getSize().getHeight());
         } else {
             image = new BufferedImage(
-                    (int) component.getSize().getWidth(),
-                    (int) component.getSize().getHeight(),
-                    BufferedImage.TYPE_INT_ARGB);
+                (int) component.getSize().getWidth(),
+                (int) component.getSize().getHeight(),
+                BufferedImage.TYPE_INT_ARGB);
         }
 
         Graphics g = image.getGraphics();

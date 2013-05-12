@@ -74,16 +74,16 @@ This plugin contributes the following property editors
 
 | *Type*                       | *Format*                                            |
 | ---------------------------- | --------------------------------------------------- |
-| java.awt.Color               | #F00 ; red, green, blue, alpha ; Color constant     |
+| java.awt.Color               | #RGB ; #RGBA ; #RRGGBB; #RRGGBBAA ; Color constant  |
 | java.awt.Dimension           | width, height                                       |
 | java.awt.Font                | family-style-size                                   |
-| java.awt.GradientPaint       | x1, y1, #F00, x2, y2, #00F, CYCLIC                  |
+| java.awt.GradientPaint       | x1, y1, #RGB, x2, y2, #RGB, CYCLIC                  |
 | java.awt.Image               | path/to/image_file                                  |
 | java.awt.Insets              | top, left, bottom, right                            |
-| java.awt.LinearGradientPaint | xy, y1, x2, x2, [0.0, 1.0], [#F00, #00F], REPEAT    |
+| java.awt.LinearGradientPaint | xy, y1, x2, x2, [0.0, 1.0], [#RGB, #RGB], REPEAT    |
 | java.awt.Point               | x, y                                                |
-| java.awt.Polygon             | x1, y1, x2, y2, ..., xn, yn
-| java.awt.RadialGradientPaint | xy, y1, r, fx, fy, [0.0, 1.0], [#F00, #00F], REPEAT |
+| java.awt.Polygon             | x1, y1, x2, y2, ..., xn, yn                         |
+| java.awt.RadialGradientPaint | xy, y1, r, fx, fy, [0.0, 1.0], [#RGB, #RGB], REPEAT |
 | java.awt.Rectangle           | x, y, width, height                                 |
 | java.awt.geom.Point2D        | x, y                                                |
 | java.awt.geom.Rectangle2D    | x, y , width, height                                |
@@ -93,9 +93,9 @@ Notes:
 
  * CYCLIC may be `true` or `false`.
  * REPEAT must be one of `MultipleGradientPaint.CycleMethod`.
- * GradientPaint supports another format: x1, y1 | x2, y2, | #F00, #00F | CYCLIC
+ * GradientPaint supports another format: x1, y1 | x2, y2, | #RGB, #RGB | CYCLIC
  * Color supports all color constants defined by `griffon.swing.Colors`.
- * All color formats are supported by the gradient editors.
+ * All color formats are supported by gradient editors.
 
 The following styles are supported by `FontPropertyEditor`
 
