@@ -732,11 +732,11 @@ public abstract class AbstractGriffonApplet extends JApplet implements GriffonAp
         return messageSource.formatMessage(message, args);
     }
 
-    public ResourceResolver resolveResourceSource() {
+    public ResourceResolver getResourceResolver() {
         return resourceResolver;
     }
 
-    public void setResourceSource(ResourceResolver resourceResolver) {
+    public void setResourceResolver(ResourceResolver resourceResolver) {
         this.resourceResolver = resourceResolver;
     }
 
