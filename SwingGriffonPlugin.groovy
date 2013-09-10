@@ -34,6 +34,7 @@ class SwingGriffonPlugin {
 
     List authors = [
         [
+            id: 'aalmiray',
             name: 'Andres Almiray',
             email: 'aalmiray@yahoo.com'
         ]
